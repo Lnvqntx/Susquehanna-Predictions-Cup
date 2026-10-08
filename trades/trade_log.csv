@@ -1,1 +1,2 @@
 timestamp,market,side,price,contracts,cost,model_probability,edge,reason,status
+2026-10-08T18:40+05:30,Rhode Island Senate - Democratic Party,BUY YES,0.845,17751,14999.595,0.970,0.125,"Live order book verified; RI evidence and independent models strongly favor Democrat; first-position cap 15% bankroll","PLANNED_NOT_EXECUTED"
