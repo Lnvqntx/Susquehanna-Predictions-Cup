@@ -4,33 +4,48 @@
 - [x] Create repository
 - [x] Create research/data/model directories
 - [x] Record initial Alaska and Kansas market snapshots
-- [x] Record initial Kansas polling dataset
+- [x] Record Kansas polling dataset
+- [x] Create trade journal
 
-## Phase 1 — Kansas Deep Dive 🚧
+## Phase 1 — Kansas Deep Dive ✅ / calibration next
 - [x] Collect current polling
 - [x] Check independent forecast models
 - [x] Check Kansas partisan baseline
 - [x] Check incumbency/history
 - [x] Check campaign-finance and spending signals
-- [ ] Build a transparent probability model
-- [ ] Stress-test assumptions
-- [ ] Produce a final trade/no-trade decision
-- [ ] Log the decision and rationale
+- [x] Build transparent first-pass probability model
+- [x] Produce model v1 working probability
+- [ ] Stress-test assumptions systematically
+- [ ] Add historical calibration layer
+- [ ] Produce final trade/no-trade decision
+
+**Current Kansas v1:** ~36.8% Democratic win probability vs 35.5% executable YES. Raw edge ~+1.3 pts. Decision: **NO TRADE YET**.
 
 ## Phase 2 — General Election Model
-Build reusable components for poll recency weighting, pollster weighting, fundamentals prior, national environment, margin uncertainty, win-probability conversion, and model ensemble.
+- [ ] Recency-weighted polls
+- [ ] Pollster reliability weights
+- [ ] Fundamentals prior
+- [ ] National environment factor
+- [ ] Correlated election error
+- [ ] Margin → win-probability calibration
+- [ ] Forecast ensemble
 
-## Phase 3 — Portfolio / Trading
-- rank researched markets by edge
-- account for correlations between races
-- use conservative fractional Kelly
-- cap exposure per race/theme
-- maintain an append-only trade journal
+## Phase 3 — Market Selection
+- [ ] Scan all open markets
+- [ ] Rank by price vs model discrepancy
+- [ ] Research top candidates deeply
+- [ ] Track market momentum and liquidity
 
-## Phase 4 — Automation
-Once the manual model works, add market snapshots, poll ingestion, probability refreshes, price-move detection, and meaningful-edge alerts.
+## Phase 4 — Portfolio / Trading
+- [ ] Conservative fractional Kelly
+- [ ] Position caps
+- [ ] Cross-race correlation controls
+- [ ] Entry/exit rules
+- [ ] Append-only trade journal
 
-## Decision rule
-For a YES contract at price q: edge = P(YES) - q.
-
-A position requires positive edge, sufficient confidence, robustness to reasonable model changes, and acceptable portfolio concentration. No trade is triggered by a single poll or headline.
+## Phase 5 — Automation
+- [ ] Market snapshot ingestion
+- [ ] Poll ingestion
+- [ ] Probability refresh
+- [ ] Edge scanner
+- [ ] Alerting for robust opportunities
