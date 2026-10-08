@@ -1,2 +1,3 @@
-market,market_price,structural_margin,poll_margin,national_adjustment,poll_model_probability,external_forecast_mean,ensemble_weight_poll_model,ensemble_weight_external,working_probability,raw_edge,decision
-Kansas Senate,0.355,-8.0,0.6,1.0,0.397,0.348,0.4,0.6,0.368,0.013,NO_TRADE
+market,market_price,structural_margin,poll_margin,national_adjustment,poll_model_probability,external_forecast_mean,working_probability,raw_edge,confidence,decision
+Kansas Senate,0.355,-8.0,0.6,1.0,0.397,0.348,0.368,0.013,medium,NO_TRADE
+New Hampshire Senate,0.845,4.3,5.9,0.0,0.900,0.890,0.890,0.045,medium_high,READY
