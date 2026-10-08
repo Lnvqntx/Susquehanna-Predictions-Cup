@@ -23,9 +23,9 @@ Use P(NO) = **96%**.
 Target cost = **6,000 SUSQies**.
 
 At 0.92:
-- ~6,522 contracts
+- ~6,521 contracts
 - worst-case cost: 6,000
-- payout if NO: ~6,522
+- payout if NO: ~6,521
 - gross profit if NO: ~522
 - expected profit at 96%: ~261
 
