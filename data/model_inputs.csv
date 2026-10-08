@@ -1,2 +1,2 @@
-market,market_price,structural_margin,poll_margin,national_adjustment,blended_margin,margin_sd,estimated_probability,confidence,decision
-Kansas Senate,0.355,-8.0,0.6,1.0,-1.7,6.5,0.397,medium,RESEARCH
+market,market_price,structural_margin,poll_margin,national_adjustment,poll_model_probability,external_forecast_mean,ensemble_weight_poll_model,ensemble_weight_external,working_probability,raw_edge,decision
+Kansas Senate,0.355,-8.0,0.6,1.0,0.397,0.348,0.4,0.6,0.368,0.013,NO_TRADE
