@@ -1,6 +1,9 @@
-state,race,pollster,start_date,end_date,dem_pct,rep_pct,third_party_pct,undecided_pct
-KS,Senate,YouGov,2026-09-24,2026-10-04,48,45,,7
-KS,Senate,NYT/Siena,2026-09-22,2026-10-01,46,47,,7
-KS,Senate,Trafalgar Group,2026-09-29,2026-10-01,44,44,,12
-KS,Senate,Emerson,2026-09-15,2026-09-16,45,43,4,8
-KS,Senate,co/efficient,2026-09-08,2026-09-10,44,49,,7
+state,race,pollster,start_date,end_date,dem_pct,rep_pct,third_party_pct,undecided_pct,sample_size
+KS,Senate,YouGov,2026-09-24,2026-10-04,48,45,,7,2255
+KS,Senate,NYT/Siena,2026-09-22,2026-10-01,46,47,,7,605
+KS,Senate,Trafalgar Group,2026-09-29,2026-10-01,44,44,,12,1095
+KS,Senate,Wedgewood Polls,2026-09-22,2026-09-24,50,48,2,,500
+KS,Senate,Emerson,2026-09-15,2026-09-16,45,43,4,8,750
+KS,Senate,Global Strategy Group,2026-09-15,2026-09-16,49,47,,4,800
+KS,Senate,co/efficient,2026-09-08,2026-09-10,44,49,,7,915
+KS,Senate,GBAO,2026-09-30,2026-10-04,46,41,7,6,600
