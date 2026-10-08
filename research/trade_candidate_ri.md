@@ -1,34 +1,39 @@
 # First Trade Candidate — Rhode Island Senate Democrat
 
-## Hypothesis
-The Susquehanna market may be materially underpricing the Democratic Party's probability of winning Rhode Island's Senate seat.
+## Live quote
+- Buy YES: **0.845**
+- Visible quantity at 0.845: **35,034**
+- Market volume: **21.97M SUSQies**
 
-## Current evidence
-Displayed YES: 84%
+## Working probability
+**97%**
 
-External probability references:
-- Polymarket: ~96%
-- PredictIt: ~99%
-- Scrutinel: 99.5%
-- Call the Map: >99%
-- Who Shows Up: >99%
+This is deliberately conservative versus multiple current external models in the 99%+ range. citeturn884430search0turn884430search2turn884430search5
 
-Conservative working probability for trade evaluation: **97%**.
+## Expected value
+At 0.845:
+- edge = 0.97 - 0.845 = **+0.125**
+- EV/contract = **+0.125 SUSQies**
+- expected return on capital = **~14.8%**
 
-## Trigger
-Trade YES only if the signed-in Susquehanna page shows:
-- executable Buy YES <= 86¢ preferred; 87–88¢ acceptable only with strong depth
-- meaningful liquidity at or near the ask
-- no unusual rule difference discovered on the Info tab
+## Robustness
+At assumed win probabilities:
+- 90% → +5.5 pt edge
+- 92% → +7.5 pt edge
+- 95% → +10.5 pt edge
+- 97% → +12.5 pt edge
 
-## Position plan
-Bankroll reference: 100,000 SUSQies.
+The trade still has positive raw edge even with a substantial haircut from the 99%+ external forecasts.
 
-Because this is the first live position and calibration is incomplete, target **10,000–15,000 SUSQies of cost**, not a full Kelly allocation.
+## Size
+Target cost: **15,000 SUSQies max**.
 
-At 85¢, 15,000 cost buys about 17,647 contracts and returns 17,647 if correct; profit is about 2,647 SUSQies before any platform friction. At 86¢, 15,000 cost buys about 17,442 contracts; profit if correct is about 2,442.
+At 0.845 this is approximately **17,751 YES contracts**.
 
-## Invalidation
-Do not trade if the executable quote is materially above 88¢, if liquidity is too thin, or if new evidence changes the race materially.
+This is below the visible 0.845 ask liquidity of 35,034 contracts.
 
-**Status: PENDING LIVE ORDER-BOOK CHECK**
+## Execution
+Prefer a **limit order at 0.845** so we do not pay above our intended ceiling. Do not chase above 0.850 without a new probability/price calculation.
+
+## Decision
+**BUY YES — pending user execution.**
