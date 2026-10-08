@@ -1,3 +1,4 @@
 timestamp,market,side,price,contracts,cost,model_probability,edge,reason,status
 2026-10-08T18:47+05:30,Rhode Island Senate - Democratic Party,BUY YES,0.845,17751,14999.595,0.970,0.125,First position executed,LIVE
 2026-10-08T19:02+05:30,New Hampshire Senate - Democratic Party,BUY YES,0.845,9467,7999.615,0.890,0.045,Second position executed,LIVE
+2026-10-08T19:10+05:30,Georgia Senate - Republican Party,BUY NO,0.920,6522,6000.24,0.960,0.040,"Third-trade candidate; polling and forecasts strongly favor Ossoff; live NO ask has sufficient liquidity; reduced size for correlation and debate risk","PLANNED_NOT_EXECUTED"
