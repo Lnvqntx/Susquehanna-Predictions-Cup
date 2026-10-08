@@ -1,0 +1,6 @@
+state,race,pollster,start_date,end_date,dem_pct,rep_pct,third_party_pct,undecided_pct
+KS,Senate,YouGov,2026-09-24,2026-10-04,48,45,,7
+KS,Senate,NYT/Siena,2026-09-22,2026-10-01,46,47,,7
+KS,Senate,Trafalgar Group,2026-09-29,2026-10-01,44,44,,12
+KS,Senate,Emerson,2026-09-15,2026-09-16,45,43,4,8
+KS,Senate,co/efficient,2026-09-08,2026-09-10,44,49,,7
