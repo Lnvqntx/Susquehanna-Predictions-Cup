@@ -1,46 +1,91 @@
 # Delaware Senate — Republican Party
 
-## Current public Susquehanna screen
+## Live snapshot — 2026-10-09
 
-The Susquehanna home page currently displays the Republican contract around **7% YES / 93% NO**. The market is ID **386** and settles Nov. 4, 2026. The public market page requires sign-in to expose executable quotes/order-book depth. citeturn539384view0turn125079view0
+- Buy YES (Republican): **0.115**
+- Buy NO: **0.890**
+- Sell YES: **0.110**
+- Sell NO: **0.885**
+- Market price: **0.110 YES / 0.890 NO**
+- Spread: **0.50%**
+- Total volume: **12,916,343 SUSQies**
+- Resolution: **Nov. 4, 2026 at 12:00 PM EST**
 
-## External evidence
+### NO order book
 
-Who Shows Up's Oct. 8 forecast gives incumbent Democrat Chris Coons **>99%** to win, with a projected D+26.2 margin and an 80% simulated margin range of D+18.3 to D+34.2. citeturn280445search0
+Best visible asks:
+- 0.890: **1,038 contracts**
+- 0.895: **5,605**
+- 0.900: **23,659**
+- 0.905: **160,895**
+- 0.910: **233,953**
+- 0.915: **40,377**
+- 0.920: **109,397**
+- 0.925: **188,144**
 
-PollingForecast gives Coons **98%** with a best-bet margin of D+30.7. It also shows historical Delaware Senate polling misses generally still leaving Coons far ahead. citeturn280445search1
+The best ask has limited depth, so a larger order will walk the book.
 
-Call the Map's Oct. 7 forecast gives Coons **99.5%** to win and a D+31.9 predicted margin. citeturn280445search2
+## Current external evidence
 
-PoliAgg's market cross-check shows Polymarket around **99% Democratic / 2% Republican**, PredictIt 99% Democratic / 1% Republican, and Kalshi around 98% Democratic / 2% Republican. citeturn813589search4
+Who Shows Up (updated Oct. 8) gives Chris Coons **>99%** to win, with an expected D+26.2 margin and an 80% simulated range of D+18.3 to D+34.2. citeturn880502search0
 
-Official Delaware sample ballots confirm Chris Coons (D) and Michael Katz (R) as the Senate nominees on the 2026 general-election ballot. citeturn375172search0
+Call the Map (Oct. 8) gives Coons **99.5%** and a D+32.0 forecast margin. citeturn880502search1
 
-## Preliminary probability
+Scrutinel (updated Oct. 8) gives Coons **99.8%**, with a D+29.2 projected margin, an 80% range of D+17.7 to D+40.7, and a D+16.3 partisan lean. citeturn880502search2
 
-For the Republican contract:
-- Conservative P(Republican wins): **2.5%**
-- Therefore P(NO): **97.5%**
+PollingForecast gives Coons **98%**, with a D+30.7 best-bet margin and historical Delaware Senate results showing large Democratic margins. citeturn880502search3
 
-This is deliberately below the strongest >99% forecasts.
+A separate Oct. 7 forecast from COYNTOSS gives Coons **97.9%**. citeturn880502search4
 
-## Screening edge
+The evidence is unusually consistent across models. The key exception is not a contrary forecast but the absence of a current nominee-matched public poll in some models; that makes the model prior more important.
 
-Using a 93% NO price:
-- P(NO) = 97.5%
-- Price = 93.0%
-- Raw edge = **+4.5 pts**
+## Conservative probability
 
-If the live executable NO price is 93.5%:
-- Raw edge = **+4.0 pts**
+For the Republican contract, use **P(Republican wins) = 2.0%**.
 
-If it is 94.0%:
-- Raw edge = **+3.5 pts**
+Therefore:
+**P(NO) = 98.0%**
 
-## Decision gate
+This is still below the strongest 99%+ forecasts and deliberately allows a large model error.
 
-This is a strong candidate **only if the signed-in order book confirms the NO ask remains <=94% with adequate liquidity**.
+## Executable edge
 
-Because our existing portfolio already contains three Democratic-favorable positions, this trade should be small unless the executable price is unusually favorable.
+At the current Buy NO ask of **0.890**:
 
-**Status: NEXT TRADE CANDIDATE — LIVE ORDER-BOOK CHECK REQUIRED**
+- P(NO): **98.0%**
+- Price: **89.0%**
+- Raw edge: **+9.0 percentage points**
+- EV per contract: **+0.090 SUSQies**
+
+If a limit order walks through 0.895 and 0.900, the average should remain below 0.900 for a 5,000-SUSQie cost target because the visible depth is sufficient.
+
+## Position sizing
+
+Existing portfolio is already heavily aligned with a Democratic-favorable environment. Therefore Trade #4 should be smaller.
+
+**Target cost: 5,000 SUSQies**
+
+Use a **BUY NO limit order at 90.0%**.
+
+Do not pay above 90.0%.
+
+Approximate execution across visible asks:
+- 1,038 @ 0.890
+- ~4,555 @ 0.895
+- remainder, if needed, at 0.900
+
+This corresponds to roughly **5,593 NO contracts** for 5,000 SUSQies of cost, depending on exact matching.
+
+## Decision
+
+**BUY NO — Trade #4 candidate.**
+
+The edge is large enough to overcome reasonable probability haircuts:
+- 95% P(NO) → +5 pts at 90¢
+- 96% → +6 pts
+- 97% → +7 pts
+- 98% → +8 pts
+
+Portfolio correlation is the main reason for keeping this at 5k rather than making it a larger position.
+
+**Status: READY TO EXECUTE**
