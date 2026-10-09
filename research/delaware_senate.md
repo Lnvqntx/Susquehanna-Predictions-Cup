@@ -1,12 +1,12 @@
 # Delaware Senate — Republican Party
 
-## Live snapshot — 2026-10-09
+## Live snapshot — 2026-10-09 (evening refresh)
 
 - Buy YES (Republican): **0.115**
-- Buy NO: **0.890**
+- Buy NO: **0.895**
 - Sell YES: **0.110**
-- Sell NO: **0.885**
-- Market price: **0.110 YES / 0.890 NO**
+- Sell NO: **0.890**
+- Market price: **0.110 YES / 0.895 NO**
 - Spread: **0.50%**
 - Total volume: **12,916,343 SUSQies**
 - Resolution: **Nov. 4, 2026 at 12:00 PM EST**
@@ -54,7 +54,7 @@ At the current Buy NO ask of **0.890**:
 
 - P(NO): **98.0%**
 - Price: **89.0%**
-- Raw edge: **+9.0 percentage points**
+- Raw edge: **+8.5 percentage points**
 - EV per contract: **+0.090 SUSQies**
 
 If a limit order walks through 0.895 and 0.900, the average should remain below 0.900 for a 5,000-SUSQie cost target because the visible depth is sufficient.
