@@ -31,6 +31,9 @@
 - [ ] Forecast ensemble
 
 ## Phase 3 — Market Selection
+- [x] Execute Trade #4 after live order-book refresh
+
+
 - [ ] Scan all open markets
 - [ ] Rank by price vs model discrepancy
 - [ ] Research top candidates deeply
