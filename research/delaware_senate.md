@@ -73,7 +73,7 @@ Approximate execution across visible asks:
 - 1,773 @ 0.895
 - 3,227-ish @ 0.900
 
-That fills roughly **5,000 SUSQies of cost** for about **5,566 NO contracts**, with an average near **0.898**.
+That fills roughly **5,000 SUSQies of cost** for about **5,565 NO contracts**, with an average near **0.8984**.
 
 ## Decision
 
