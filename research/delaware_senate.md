@@ -65,16 +65,15 @@ Existing portfolio is already heavily aligned with a Democratic-favorable enviro
 
 **Target cost: 5,000 SUSQies**
 
-Use a **BUY NO limit order at 90.0%**.
+Use a **BUY NO limit order at 89.5%**.
 
-Do not pay above 90.0%.
+Do not pay above 89.5%.
 
 Approximate execution across visible asks:
 - 1,038 @ 0.890
-- ~4,555 @ 0.895
-- remainder, if needed, at 0.900
+- 4,554 @ 0.895
 
-This corresponds to roughly **5,593 NO contracts** for 5,000 SUSQies of cost, depending on exact matching.
+That uses about **4,999.65 SUSQies** for **5,592 NO contracts**, with an average near **0.8940**. The 89.5% limit avoids paying the 0.900 tier.
 
 ## Decision
 
