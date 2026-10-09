@@ -2,3 +2,4 @@ timestamp,market,side,price,contracts,cost,model_probability,edge,reason,status
 2026-10-08T18:47+05:30,Rhode Island Senate - Democratic Party,BUY YES,0.845,17751,14999.595,0.970,0.125,First position executed,LIVE
 2026-10-08T19:02+05:30,New Hampshire Senate - Democratic Party,BUY YES,0.845,9467,7999.615,0.890,0.045,Second position executed,LIVE
 2026-10-08T19:13+05:30,Georgia Senate - Republican Party,BUY NO,0.920,6521,5999.32,0.960,0.040,Third position executed,LIVE
+2026-10-09T15:35+05:30,Delaware Senate - Republican Party,BUY NO,0.900,5593,5003.70,0.980,0.080,"Fourth-trade candidate; current NO ask 0.89, order book has enough depth through 0.90, and current external forecasts put Coons near 98-99.8%","PLANNED_NOT_EXECUTED"
