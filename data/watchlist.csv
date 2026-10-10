@@ -1,0 +1,7 @@
+market,side,model_probability,executable_price,liquidity,confidence,correlation_penalty
+Rhode Island Senate - Democratic Party,YES,0.970,0.845,35034,0.90,1.0
+New Hampshire Senate - Democratic Party,YES,0.890,0.845,9617,0.70,1.0
+Georgia Senate - Republican Party,NO,0.960,0.920,20506,0.75,1.0
+Delaware Senate - Republican Party,NO,0.980,0.895,6843,0.85,1.0
+Texas Senate - Democratic Party,YES,0.630,0.595,12469,0.60,1.0
+Kansas Senate - Democratic Party,YES,0.368,0.355,0,0.45,1.0
