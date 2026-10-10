@@ -35,7 +35,26 @@ Today's leaderboard showed 3rd place around **742.9k SUSQies**; the benchmark wi
 - [ ] Increase turnover only after calibration
 
 ## Current target
-**Michigan Senate — Democratic Party**
+**Live scanner build**
+
+The manual phase has produced six live positions. The next bottleneck is throughput, so the priority is authenticated API ingestion rather than another hand-screened market.
+
+- [x] Build API transport scaffold
+- [x] Build bulk-price reader
+- [x] Build snapshot scanner
+- [x] Build order-book fill simulator
+- [ ] Verify authenticated API schema from the account's API Reference
+- [ ] Populate exchange/market IDs
+- [ ] Run first live 100-exchange scan
+- [ ] Add 60–120 second refresh loop
+- [ ] Connect probabilities + scoring to live prices
+- [ ] Validate 10+ live candidates manually
+- [ ] Only then enable any automated order path
+
+The current Susquehanna API docs state that scripted strategies are permitted and that the v1 API supports bulk price reads for up to 100 exchange IDs; normal accounts have 100 reads/minute and 30 writes/minute. Realtime market channels require a realtime token and dropped delayed batches should trigger REST refreshes. citeturn822835search0turn314656search6
+
+## Current target
+**Live API scan — blocked only on API-key/schema verification.**
 
 Michigan has a stronger and more coherent model cluster than Maine, but the live Susquehanna price is unknown. Obtain the live order book before acting.
 
