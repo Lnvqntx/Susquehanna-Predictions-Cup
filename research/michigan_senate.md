@@ -1,45 +1,70 @@
 # Michigan Senate — Democratic Party
 
-## Priority candidate — 2026-10-10
+## Live snapshot — 2026-10-11
 
-Michigan is the next live-book candidate after Maine was rejected.
+- Buy YES: **0.640**
+- Buy NO: **0.365**
+- Sell YES: **0.635**
+- Sell NO: **0.360**
+- Market price: **0.640 YES**
+- Resolution: **Nov. 4, 2026**
+- Best YES ask: **0.640**
+- Visible YES quantity at 0.640: **7,877 contracts**
+- Next asks: 0.645 (3,010), 0.650 (28,587), 0.655 (67,331), 0.660 (19,369), 0.665 (95,932), 0.670 (177,579)
 
-### External evidence
+## Evidence
 
-RCP's current matchup page shows Abdul El-Sayed ahead of Mike Rogers **48.1% to 44.9% (+3.2)** across polls from Sept. 15–Oct. 6. Recent polls include Quantus +1, YouGov +1, Mitchell +5, Trafalgar +2, Fox +1, Marist +7, and NYT/Siena +5. RCP rates Michigan a **Toss Up** and shows Polymarket around **70% El-Sayed**. citeturn168089search2
+FiftyPlusOne's Oct. 10 weighted polling average is **El-Sayed 48.3 / Rogers 44.7 (+3.6)**. citeturn719576search5
 
-Scrutinel currently gives El-Sayed **76%**, with a projected D+4.8 margin and an 80% range from R+4.1 to D+13.6. citeturn168089search3
+270toWin's current poll page lists an average around **47.8 / 43.8 (+4.0)**, with recent polls including Mitchell +5, Trafalgar +2, Fox +1, Marist +7, Cygnal +5 and Siena +5. citeturn719576search2
 
-Who Shows Up gives El-Sayed **82%**, with expected margin D+4.1 and an 80% range from R+1.6 to D+9.9. citeturn168089search5
+Scrutinel's model gives El-Sayed **76%**, projected D+4.8; its model explicitly includes correlated national/state/demographic error. citeturn356616search0
 
-Call the Map's current poll archive includes a fresh Mitchell poll of **46–41 El-Sayed**, while its broader current Michigan model places the race around **D+1.2** in the newest Quantus poll and treats the race as competitive. citeturn168089search6turn168089search9
+Who Shows Up gives **82%**, projected D+4.1. citeturn356616search1
 
-### Why Michigan
+COYNTOSS gives **84%**, projected D+3.76. citeturn356616search2
 
-Unlike Maine, we have:
-- a larger cross-model probability cluster (roughly 70–82%);
-- a relatively strong polling lead for El-Sayed;
-- a much less extreme partisan baseline (Trump won Michigan by only 1.4 in 2024);
-- a clean two-way-ish race with multiple recent polls.
+PredictionEdge's Oct. 10 market snapshot shows Kalshi around **66% El-Sayed**. citeturn356616search4
 
-The main issue is that the market may already recognize most of this.
+Polymarket currently shows approximately **70–72% El-Sayed**. citeturn719576search0turn719576search1
 
-### Execution gate
+Recent reporting also shows Democratic mobilization support in Michigan, including UAW activity and planned campaign appearances by Ocasio-Cortez and Obama. These are secondary signals, not direct probability inputs. citeturn719576news30turn719576news29turn719576news36
 
-We need the signed-in Susquehanna Michigan Democratic market:
-1. Buy YES
-2. Buy NO
-3. YES order-book depth
-4. NO order-book depth
-5. market price / spread
+## Risk factors
 
-**No trade until the executable price is compared with the probability range.**
+This remains a genuinely competitive race. Rogers is a former congressman with statewide experience, and the Oct. 8 debate featured sharp attacks on El-Sayed's policy positions and foreign-policy views. citeturn356616news29
 
-### Preliminary decision rule
+The model cluster is therefore not a 90%+ certainty. Our existing portfolio is also already tilted toward Democratic-favorable outcomes.
 
-- YES <= 60%: strong candidate
-- 60–65%: investigate deeply
-- 65–70%: probably pass unless model >75%
-- >70%: likely pass unless fresh evidence materially improves
+## Working probability
 
-**Status: NEXT LIVE-BOOK TARGET**
+Use **P(Democratic win) = 72%**.
+
+This is deliberately below the 76–84% independent model cluster and above the 66–72% market cluster.
+
+## Edge
+
+At 0.640:
+- P(YES) = **72.0%**
+- Price = **64.0%**
+- Raw edge = **+8.0 percentage points**
+- EV per contract = **+0.080 SUSQies**
+
+## Execution
+
+Preferred:
+- **BUY YES**
+- Cost target: **5,000 SUSQies**
+- Limit: **64.0%**
+
+The 5,000 cost target needs about **7,812 contracts**, which fits inside the **7,877** contracts currently displayed at 0.640.
+
+Do not chase above **65.0%** without recalculating.
+
+## Decision
+
+**TRADE #6 — BUY YES**
+
+This is one of the strongest currently verified opportunities in our portfolio scan after accounting for model disagreement and correlation.
+
+**Status: READY TO EXECUTE**
