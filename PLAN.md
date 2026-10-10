@@ -30,6 +30,11 @@
 - [ ] Margin → win-probability calibration
 - [ ] Forecast ensemble
 
+## Phase 3 — Market Selection ✅
+- [x] Build snapshot market scanner
+- [x] Add probability/price/liquidity/confidence scoring
+- [x] Add portfolio correlation inputs
+
 ## Phase 3 — Market Selection
 - [x] Execute Trade #4 after live order-book refresh
 
@@ -47,6 +52,8 @@
 - [ ] Append-only trade journal
 
 ## Phase 5 — Automation
+- [x] Define API integration boundary
+
 - [ ] Market snapshot ingestion
 - [ ] Poll ingestion
 - [ ] Probability refresh
