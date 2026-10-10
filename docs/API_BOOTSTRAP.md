@@ -24,3 +24,6 @@ Setup:
 5. Run: python src/scan_live.py
 
 Source: Susquehanna official changelog, October 2026.
+
+## Important
+The transport layer currently keeps the price-ID query parameter and response parsing configurable because the exact authenticated API Reference schema could not be verified from public indexing. Do not treat the scaffold as production-ready until the account's API Reference confirms the request and response fields.
