@@ -3,6 +3,8 @@
 Systematic research and trading framework for the 2026 Susquehanna Predictions Cup.
 
 ## Live portfolio
+
+- Michigan Senate D: **7,812 YES @ 0.640** — **Trade #6 LIVE**
 - Rhode Island Senate D: 17,751 YES @ 0.845
 - New Hampshire Senate D: 9,467 YES @ 0.845
 - Georgia Senate R: 6,521 NO @ 0.920
@@ -44,4 +46,4 @@ The scanner ranks candidates using model probability, executable price, liquidit
 ```
 
 ## Status
-Phase 3: five positions live. Scanner foundation is in place; next step is historical calibration and official API ingestion.
+Phase 3: **six positions live**. The Michigan position was filled at 0.640; current liquid balance shown by the account is ~58,019 SUSQies. Scanner foundation is in place; next step is historical calibration and official API ingestion.
