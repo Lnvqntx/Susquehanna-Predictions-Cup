@@ -28,6 +28,7 @@ def main() -> int:
     parser.add_argument("--quantity", type=int, required=True)
     parser.add_argument("--price", type=parse_price, required=True)
     parser.add_argument("--reason", required=True)
+    parser.add_argument("--max-cost", type=float, default=5000.0)
     parser.add_argument("--confirm", action="store_true")
     args = parser.parse_args()
 
@@ -37,6 +38,15 @@ def main() -> int:
     tournament = discover_midterm_tournament(api)
     tournament_id = str(tournament["id"])
     cost = args.quantity * args.price
+    if cost > args.max_cost:
+        parser.error(
+            f"order cost {cost:.2f} exceeds --max-cost {args.max_cost:.2f} SUSQies"
+        )
+    if cost > float(tournament.get("myBalance") or 0):
+        parser.error(
+            f"order cost {cost:.2f} exceeds tournament balance "
+            f"{tournament.get('myBalance')}"
+        )
 
     print("\nTRADE REVIEW")
     print(f"  tournament: {tournament.get('name')} [{tournament_id}]")
@@ -46,6 +56,11 @@ def main() -> int:
     print(f"  quantity:   {args.quantity:,}")
     print(f"  limit:      {args.price:.3f}")
     print(f"  max cost:   {cost:,.2f} SUSQies")
+    live_price = api.price(args.exchange_id, tournament_id=tournament_id)
+    print(
+        f"  live quote: bestBid={live_price.get('bestBid')} "
+        f"bestAsk={live_price.get('bestAsk')} spread={live_price.get('spread')}"
+    )
     print(f"  reason:     {args.reason}")
 
     if not args.confirm:
