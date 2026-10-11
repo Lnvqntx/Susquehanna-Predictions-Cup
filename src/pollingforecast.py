@@ -47,6 +47,8 @@ def party_probability(row: dict[str, Any], party: str) -> float | None:
         value = row.get("chance_left")
     elif party == "republican":
         value = row.get("chance_right")
+        if value is None and row.get("chance_left") is not None:
+            value = 1.0 - float(row["chance_left"])
     else:
         return None
     try:
