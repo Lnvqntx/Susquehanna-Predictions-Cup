@@ -14,6 +14,21 @@ Systematic research and trading framework for the 2026 Susquehanna Predictions C
 ## Current objective
 Move from discretionary one-market research to a high-throughput, portfolio-aware scanner that can rank many markets by executable expected value.
 
+## Autonomous trading
+
+The v1 autonomous engine is in `src/autopilot.py`. It matches live Susquehanna markets to Polling Forecast's public 2026 House/Senate/Governor forecast API, ranks executable edges, and can place guarded limit orders.
+
+One scan (read-only):
+`python src/autopilot.py`
+
+One live cycle:
+`python src/autopilot.py --live`
+
+Continuous live mode:
+`python src/autopilot.py --live --loop --interval 300`
+
+Default guardrails are 10 percentage-point minimum edge, 1.5 percentage-point max spread, 3,000 SUSQies maximum per order and 3,000 SUSQies maximum per cycle. The probability signal is v1 and uses one external forecast source; this is not yet a calibrated institutional model.
+
 ## Scanner
 Run from the repository root:
 python scripts/scan_snapshot.py --input data/watchlist.csv
