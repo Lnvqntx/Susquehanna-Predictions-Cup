@@ -206,6 +206,12 @@ def main() -> int:
     parser.add_argument("--max-spread", type=float, default=0.015)
     parser.add_argument("--max-order-cost", type=float, default=3000.0)
     parser.add_argument("--max-cycle-cost", type=float, default=3000.0)
+    parser.add_argument(
+        "--max-open-cost",
+        type=float,
+        default=6000.0,
+        help="Maximum total notional committed across currently open limit orders.",
+    )
     parser.add_argument("--top", type=int, default=10)
     args = parser.parse_args()
 
@@ -231,6 +237,33 @@ def main() -> int:
                     for o in live_open_orders
                     if o.get("exchangeId") is not None
                 )
+                open_notional = 0.0
+                for order in live_open_orders:
+                    try:
+                        remaining = float(
+                            order.get("remainingQuantity")
+                            or order.get("quantityRemaining")
+                            or max(
+                                float(order.get("quantity") or 0)
+                                - float(order.get("quantityTraded") or 0),
+                                0.0,
+                            )
+                        )
+                        order_price = float(
+                            order.get("price")
+                            or order.get("limitPrice")
+                            or 0.0
+                        )
+                        if remaining > 0 and order_price > 0:
+                            open_notional += remaining * order_price
+                    except (TypeError, ValueError):
+                        print(
+                            "⚠️ Could not value one open order; "
+                            "live trading halted for safety."
+                        )
+                        raise SusqAPIError(
+                            "Unable to value an existing open order."
+                        )
             except SusqAPIError as exc:
                 print(f"❌ Portfolio reconciliation failed: {exc}")
                 if args.live:
@@ -241,7 +274,10 @@ def main() -> int:
                     continue
                 occupied_exchanges = set()
             print(f"\nAUTOPILOT | {datetime.now(timezone.utc).isoformat(timespec='seconds')}")
-            print(f"balance={balance:,.2f} | candidates={len(candidates)}")
+            print(
+                f"balance={balance:,.2f} | candidates={len(candidates)} | "
+                f"open_notional={open_notional:,.2f} / {args.max_open_cost:,.2f}"
+            )
 
             for i, c in enumerate(candidates[:args.top], 1):
                 print(
@@ -258,10 +294,23 @@ def main() -> int:
                 for c in candidates:
                     if spent >= args.max_cycle_cost:
                         break
+                    if open_notional >= args.max_open_cost:
+                        print(
+                            f"🛑 OPEN ORDER CAP reached "
+                            f"({open_notional:,.2f} >= {args.max_open_cost:,.2f}); "
+                            "no new order this cycle."
+                        )
+                        break
                     exchange_id = str(c["exchange_id"])
                     if exchange_id in state["orders"]:
                         continue
-                    cost_cap = min(args.max_order_cost, args.max_cycle_cost - spent, balance - spent)
+                    open_capacity = max(args.max_open_cost - open_notional, 0.0)
+                    cost_cap = min(
+                        args.max_order_cost,
+                        args.max_cycle_cost - spent,
+                        balance - spent,
+                        open_capacity,
+                    )
                     if cost_cap <= 0:
                         break
                     price = float(c["buy_yes"])
@@ -301,6 +350,10 @@ def main() -> int:
                     # Budget the entire submitted notional, not only the amount
                     # immediately filled. Resting limit orders still commit capacity.
                     spent += committed_cost
+                    open_notional += max(
+                        float(result.get("remainingQuantity") or 0),
+                        0.0,
+                    ) * price
                     traded += 1
                     print(
                         f"✅ AUTO TRADE | {c['title']} | order={order_id} | "
