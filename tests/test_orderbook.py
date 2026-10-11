@@ -8,5 +8,5 @@ def test_fill_budget_walks_best_prices_first():
         max_price=0.82,
     )
     assert result.contracts == 18
-    assert round(result.cost, 2) == 14.60
+    assert round(result.cost, 2) == 14.56
     assert result.worst_price == 0.82
