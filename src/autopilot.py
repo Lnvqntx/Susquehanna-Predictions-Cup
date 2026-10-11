@@ -19,6 +19,8 @@ from src.scan_live import build_rows, discover_midterm_tournament
 from src.susq_api import SusqAPI, SusqAPIError
 
 STATE_PATH = ROOT / "data" / "autopilot_state.json"
+PORTFOLIO_PATH = ROOT / "data" / "portfolio.csv"
+TRADE_LOG_PATH = ROOT / "trades" / "trade_log.csv"
 STATE_ABSENT = {"orders": {}, "spent": {}}
 
 STATE_ABBREV = {
@@ -77,6 +79,24 @@ def executable_price(row: dict[str, Any]) -> float | None:
     if value is None:
         return None
     return float(value)
+
+
+
+def existing_manual_market_titles() -> set[str]:
+    titles: set[str] = set()
+    for path in (PORTFOLIO_PATH, TRADE_LOG_PATH):
+        if not path.exists():
+            continue
+        try:
+            import csv
+            with path.open(newline="", encoding="utf-8") as handle:
+                for row in csv.DictReader(handle):
+                    market = (row.get("market") or "").strip()
+                    if market and not market.startswith("#"):
+                        titles.add(market)
+        except OSError:
+            continue
+    return titles
 
 
 def choose_candidates(rows: list[dict[str, Any]], forecasts: dict[str, dict[str, Any]],
@@ -169,6 +189,7 @@ def main() -> int:
 
     api = SusqAPI()
     state = load_state()
+    manual_titles = existing_manual_market_titles()
 
     while True:
         try:
@@ -188,7 +209,11 @@ def main() -> int:
             if args.live and candidates:
                 spent = 0.0
                 traded = 0
+                skipped_existing = 0
                 for c in candidates:
+                    if c["title"] in manual_titles:
+                        skipped_existing += 1
+                        continue
                     if spent >= args.max_cycle_cost:
                         break
                     exchange_id = str(c["exchange_id"])
@@ -222,7 +247,9 @@ def main() -> int:
                 state["lastCycleAt"] = datetime.now(timezone.utc).isoformat()
                 state["lastCycleSpent"] = spent
                 state["lastCycleTrades"] = traded
+                state["lastCycleSkippedExisting"] = skipped_existing
                 save_state(state)
+                print(f"skipped_existing={skipped_existing}")
 
             if not args.loop:
                 return 0
