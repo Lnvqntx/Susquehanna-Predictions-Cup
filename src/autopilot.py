@@ -256,10 +256,6 @@ def main() -> int:
                 traded = 0
                 skipped_existing = 0
                 for c in candidates:
-                    signature = market_signature(c["title"])
-                    if signature and signature in manual_signatures:
-                        skipped_existing += 1
-                        continue
                     if spent >= args.max_cycle_cost:
                         break
                     exchange_id = str(c["exchange_id"])
@@ -323,9 +319,19 @@ def main() -> int:
                 return 0
             time.sleep(max(60, args.interval))
         except (SusqAPIError, PollingForecastError, OSError, ValueError) as exc:
-            print(f"❌ AUTOPILOT ERROR: {exc}")
+            message = str(exc)
+            transient = (
+                "SERVICE_UNAVAILABLE" in message
+                or "temporarily unavailable" in message.lower()
+                or "RATE_LIMITED" in message
+                or "Network error" in message
+            )
+            if transient:
+                print("⏳ API temporarily busy — no trade made. Retrying automatically.")
+            else:
+                print(f"⚠️ Autopilot paused: {message}")
             if not args.loop:
-                return 2
+                return 0
             time.sleep(max(60, args.interval))
 
 
