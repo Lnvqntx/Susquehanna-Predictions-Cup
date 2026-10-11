@@ -62,3 +62,6 @@ The scanner ranks candidates using model probability, executable price, liquidit
 
 ## Status
 Phase 3: **six positions live**. The Michigan position was filled at 0.640; current liquid balance shown by the account is ~58,019 SUSQies. Scanner foundation is in place; next step is historical calibration and official API ingestion.
+
+
+Autopilot safety: total outstanding limit-order notional is capped at 6,000 SUSQies by default (`--max-open-cost 6000`), in addition to the 3,000 SUSQie per-order and per-cycle caps.
