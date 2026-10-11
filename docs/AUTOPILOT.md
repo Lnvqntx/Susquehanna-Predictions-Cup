@@ -67,4 +67,4 @@ The live loop budgets the entire submitted limit-order notional, including resti
 Before a live cycle, the bot reads the tournament portfolio positions endpoint and the open-order endpoint for the active tournament. Any exchange with a nonzero position or an open order is treated as occupied and skipped. If these authoritative reads fail, live mode halts for that cycle.
 
 
-The live loop also enforces an aggregate open-order cap. Resting limit-order notional is valued from the authoritative order read and counts against the cap; a new order is not submitted when the cap is reached.
+The live loop also enforces an aggregate open-order cap. Resting limit-order notional is valued from the authoritative `GET /orders?status=open` fields (`quantity` = executable remainder, `priceLimit` = limit price) and counts against the cap; a new order is not submitted when the cap is reached.
