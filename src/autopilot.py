@@ -259,13 +259,6 @@ def main() -> int:
                         raise SusqAPIError(
                             "Unable to value an existing open order."
                         )
-            print(
-                            "⚠️ Could not value one open order; "
-                            "live trading halted for safety."
-                        )
-                        raise SusqAPIError(
-                            "Unable to value an existing open order."
-                        )
             except SusqAPIError as exc:
                 print(f"❌ Portfolio reconciliation failed: {exc}")
                 if args.live:
