@@ -108,6 +108,91 @@ class SusqAPI:
     def orderbook(self, exchange_id: str, depth: int = 20, tournament_id: str | None = None) -> Any:
         return self.get(f"/exchanges/{urllib.parse.quote(str(exchange_id), safe='')}/orderbook", {'depth': max(1, min(200, depth)), 'tournamentId': tournament_id})
 
+    def post(
+        self,
+        path: str,
+        payload: dict[str, Any],
+        idempotency_key: str | None = None,
+    ) -> Any:
+        body = json.dumps(payload).encode("utf-8")
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.config.api_key}",
+            "User-Agent": "susquehanna-predictions-cup/0.1",
+        }
+        if idempotency_key:
+            headers["Idempotency-Key"] = idempotency_key
+        url = self.config.base_url.rstrip("/") + "/" + path.lstrip("/")
+        request = urllib.request.Request(url, data=body, headers=headers, method="POST")
+        try:
+            with urllib.request.urlopen(
+                request,
+                timeout=self.config.timeout_seconds,
+                context=ssl.create_default_context(cafile=certifi.where()),
+            ) as response:
+                raw = response.read().decode("utf-8")
+                data = json.loads(raw) if raw else None
+        except urllib.error.HTTPError as exc:
+            body_text = exc.read().decode("utf-8", errors="replace")
+            try:
+                payload_out = json.loads(body_text)
+            except json.JSONDecodeError:
+                payload_out = {}
+            error = payload_out.get("error") if isinstance(payload_out, dict) else None
+            if isinstance(error, dict):
+                raise SusqAPIError(
+                    f"{error.get('code','API_ERROR')}: {error.get('message','unknown error')}"
+                ) from exc
+            raise SusqAPIError(f"HTTP {exc.code}: {body_text}") from exc
+        except urllib.error.URLError as exc:
+            raise SusqAPIError(f"Network error: {exc}") from exc
+        return data
+
+    def place_order(
+        self,
+        *,
+        exchange_id: str,
+        side: str,
+        action: str,
+        quantity: int,
+        price: float | None,
+        tournament_id: str | None,
+        idempotency_key: str,
+        expiration_date: str | None = None,
+    ) -> Any:
+        payload: dict[str, Any] = {
+            "exchangeId": str(exchange_id),
+            "side": side,
+            "action": action,
+            "quantity": quantity,
+            "idempotencyKey": idempotency_key,
+        }
+        if price is not None:
+            payload["price"] = price
+        if expiration_date is not None:
+            payload["expirationDate"] = expiration_date
+        if tournament_id is not None:
+            payload["tournamentId"] = tournament_id
+        return self.post("/orders", payload, idempotency_key=idempotency_key)
+
+    def cancel_all(
+        self,
+        *,
+        exchange_id: str | None = None,
+        market_id: str | None = None,
+        tournament_id: str | None = None,
+    ) -> Any:
+        payload: dict[str, Any] = {}
+        if exchange_id is not None:
+            payload["exchangeId"] = str(exchange_id)
+        if market_id is not None:
+            payload["marketId"] = str(market_id)
+        if tournament_id is not None:
+            payload["tournamentId"] = tournament_id
+        return self.post("/orders/cancel-all", payload)
+
+
     def bulk_prices(self, exchange_ids: list[str | int], tournament_id: str | None = None) -> list[dict[str, Any]]:
         ids = [str(x) for x in exchange_ids if str(x).strip()]
         results: list[dict[str, Any]] = []
