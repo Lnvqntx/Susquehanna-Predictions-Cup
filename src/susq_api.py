@@ -6,6 +6,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import ssl
+import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -54,16 +55,22 @@ class SusqAPI:
         if query:
             url += '?' + query
         request = urllib.request.Request(url, headers={'Accept':'application/json','Authorization':f'Bearer {self.config.api_key}','User-Agent':'susquehanna-predictions-cup/0.1'}, method='GET')
-        try:
-            ssl_context = ssl.create_default_context(cafile=certifi.where())
-            with urllib.request.urlopen(
-                request,
-                timeout=self.config.timeout_seconds,
-                context=ssl_context,
-            ) as response:
-                raw = response.read().decode('utf-8')
-                data = json.loads(raw) if raw else None
-        except urllib.error.HTTPError as exc:
+        for attempt in range(3):
+            try:
+                ssl_context = ssl.create_default_context(cafile=certifi.where())
+                with urllib.request.urlopen(
+                    request,
+                    timeout=self.config.timeout_seconds,
+                    context=ssl_context,
+                ) as response:
+                    raw = response.read().decode('utf-8')
+                    data = json.loads(raw) if raw else None
+                    return data
+            except urllib.error.HTTPError as exc:
+                retryable = exc.code in (429, 502, 503, 504)
+                if retryable and attempt < 2:
+                    time.sleep(1.5 * (attempt + 1))
+                    continue
             body = exc.read().decode('utf-8', errors='replace')
             try:
                 payload = json.loads(body)
