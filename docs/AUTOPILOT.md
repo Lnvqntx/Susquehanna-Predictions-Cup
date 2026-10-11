@@ -55,3 +55,7 @@ The bot prints the candidates it considered before it submits anything.
 ## Important limitation
 
 The v1 probability comes from one external model. It should not be interpreted as a guarantee of accuracy. Before reducing thresholds or increasing size, add a second independent forecast source and backtest the signal on saved snapshots.
+
+
+## Additional execution guard
+The live loop budgets the entire submitted limit-order notional, including resting quantities, rather than only immediate fills. It also halts the current cycle if the API reports a filled quantity above the requested quantity or a reported fill cost more than 2% above committed notional. This prevents partial-fill behavior from accidentally opening multiple orders beyond the cycle cap.
