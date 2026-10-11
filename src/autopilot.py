@@ -82,8 +82,29 @@ def executable_price(row: dict[str, Any]) -> float | None:
 
 
 
-def existing_manual_market_titles() -> set[str]:
-    titles: set[str] = set()
+def market_signature(title: str) -> tuple[str, str] | None:
+    party = party_from_title(title)
+    if not party:
+        t = title.lower()
+        if "republican party" in t:
+            party = "republican"
+        elif "democratic party" in t:
+            party = "democratic"
+    if not party:
+        return None
+    m = re.search(r"([A-Z]{2}-\\d{1,2})", title)
+    if m:
+        return m.group(1), party
+    lower = title.lower()
+    for state_name, abbr in STATE_ABBREV.items():
+        if state_name in lower and ("senate" in lower or "governor" in lower):
+            office = "SENATE" if "senate" in lower else "GOVERNOR"
+            return f"{abbr}-{office}", party
+    return None
+
+
+def existing_manual_market_signatures() -> set[tuple[str, str]]:
+    signatures: set[tuple[str, str]] = set()
     for path in (PORTFOLIO_PATH, TRADE_LOG_PATH):
         if not path.exists():
             continue
@@ -92,11 +113,12 @@ def existing_manual_market_titles() -> set[str]:
             with path.open(newline="", encoding="utf-8") as handle:
                 for row in csv.DictReader(handle):
                     market = (row.get("market") or "").strip()
-                    if market and not market.startswith("#"):
-                        titles.add(market)
+                    signature = market_signature(market)
+                    if signature:
+                        signatures.add(signature)
         except OSError:
             continue
-    return titles
+    return signatures
 
 
 def choose_candidates(rows: list[dict[str, Any]], forecasts: dict[str, dict[str, Any]],
@@ -189,7 +211,7 @@ def main() -> int:
 
     api = SusqAPI()
     state = load_state()
-    manual_titles = existing_manual_market_titles()
+    manual_signatures = existing_manual_market_signatures()
 
     while True:
         try:
@@ -211,7 +233,8 @@ def main() -> int:
                 traded = 0
                 skipped_existing = 0
                 for c in candidates:
-                    if c["title"] in manual_titles:
+                    signature = market_signature(c["title"])
+                    if signature and signature in manual_signatures:
                         skipped_existing += 1
                         continue
                     if spent >= args.max_cycle_cost:
