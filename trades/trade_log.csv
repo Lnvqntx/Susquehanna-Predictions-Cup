@@ -6,3 +6,4 @@ timestamp,market,side,price,contracts,cost,model_probability,edge,reason,status
 2026-10-09T22:13+05:30,Texas Senate - Democratic Party,BUY YES,0.595,5042,2999.99,0.630,0.035,Fifth position executed,LIVE
 2026-10-11T23:58+05:30,Michigan Senate - Democratic Party,BUY YES,0.640,7812,4999.68,0.720,0.080,Sixth position executed; signed-in notification confirms 7,812 YES shares at 0.64 average,LIVE
 2026-10-12T00:26+05:30,PA-08 House - Republican Party,BUY YES,0.300,16666,4999.80,0.500,0.200,Seventh position executed; signed-in notification confirms full 16,666 YES shares at 0.30 average,LIVE
+2026-10-11T22:08+05:30,WI-03 House - Republican Party,BUY YES,0.300,9495,2836.72,0.400,0.100,Trade #8 executed; order 31711981 filled 9,495 with 505 resting,LIVE
