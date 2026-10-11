@@ -245,13 +245,32 @@ def main() -> int:
                     cost_cap = min(args.max_order_cost, args.max_cycle_cost - spent, balance - spent)
                     if cost_cap <= 0:
                         break
+                    price = float(c["buy_yes"])
+                    requested_quantity = int(cost_cap // price)
+                    committed_cost = requested_quantity * price
+                    if requested_quantity <= 0 or committed_cost <= 0:
+                        continue
                     try:
                         result = submit_candidate(api, tournament, c, cost_cap, args.min_edge)
                     except (SusqAPIError, ValueError) as exc:
                         print(f"❌ {c['title']}: {exc}")
                         continue
-                    cost = float(result.get("totalCost") or 0)
+                    filled = int(result.get("quantityTraded") or 0)
+                    reported_cost = float(result.get("totalCost") or 0)
                     order_id = str(result.get("orderId") or "")
+                    if filled > requested_quantity:
+                        print(
+                            f"🛑 EXECUTION ANOMALY | {c['title']} | "
+                            f"filled={filled} > requested={requested_quantity}; stopping cycle"
+                        )
+                        break
+                    if reported_cost > committed_cost * 1.02:
+                        print(
+                            f"🛑 COST ANOMALY | {c['title']} | "
+                            f"reportedCost={reported_cost:.2f} > committed={committed_cost:.2f}; "
+                            "stopping cycle"
+                        )
+                        break
                     state["orders"][exchange_id] = {
                         "orderId": order_id,
                         "market": c["title"],
@@ -260,12 +279,15 @@ def main() -> int:
                         "edge": c["edge"],
                         "submittedAt": datetime.now(timezone.utc).isoformat(),
                     }
-                    spent += cost
+                    # Budget the entire submitted notional, not only the amount
+                    # immediately filled. Resting limit orders still commit capacity.
+                    spent += committed_cost
                     traded += 1
                     print(
                         f"✅ AUTO TRADE | {c['title']} | order={order_id} | "
-                        f"filled={result.get('quantityTraded')} | remaining={result.get('remainingQuantity')} | "
-                        f"cost={cost:.2f}"
+                        f"requested={requested_quantity} | filled={filled} | "
+                        f"remaining={result.get('remainingQuantity')} | "
+                        f"committed={committed_cost:.2f} | reportedFillCost={reported_cost:.2f}"
                     )
                 state["lastCycleAt"] = datetime.now(timezone.utc).isoformat()
                 state["lastCycleSpent"] = spent
