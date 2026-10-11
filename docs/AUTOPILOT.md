@@ -31,7 +31,8 @@ Defaults:
 - maximum cost per scan cycle: 3,000 SUSQies
 - refresh interval in loop mode: 300 seconds, never below 60 seconds
 - limit orders only
-- no duplicate exchange order while present in local state
+- no duplicate exchange order while present in authoritative portfolio or open-order API reads
+- live mode halts if portfolio reconciliation fails
 - client-side idempotency key on every order
 
 The live API key must have `read` and `trade` scopes and remain only in the local `.env`.
@@ -59,3 +60,7 @@ The v1 probability comes from one external model. It should not be interpreted a
 
 ## Additional execution guard
 The live loop budgets the entire submitted limit-order notional, including resting quantities, rather than only immediate fills. It also halts the current cycle if the API reports a filled quantity above the requested quantity or a reported fill cost more than 2% above committed notional. This prevents partial-fill behavior from accidentally opening multiple orders beyond the cycle cap.
+
+
+## Position reconciliation
+Before a live cycle, the bot reads the tournament portfolio positions endpoint and the open-order endpoint for the active tournament. Any exchange with a nonzero position or an open order is treated as occupied and skipped. If these authoritative reads fail, live mode halts for that cycle.
