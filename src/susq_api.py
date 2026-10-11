@@ -5,9 +5,12 @@ import os
 import urllib.error
 import urllib.parse
 import urllib.request
+import ssl
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+import certifi
 
 
 class SusqAPIError(RuntimeError):
