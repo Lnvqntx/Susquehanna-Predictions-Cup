@@ -240,24 +240,26 @@ def main() -> int:
                 open_notional = 0.0
                 for order in live_open_orders:
                     try:
-                        remaining = float(
-                            order.get("remainingQuantity")
-                            or order.get("quantityRemaining")
-                            or max(
-                                float(order.get("quantity") or 0)
-                                - float(order.get("quantityTraded") or 0),
-                                0.0,
-                            )
-                        )
+                        # GET /orders?status=open returns Order.quantity as the
+                        # executable remainder and Order.priceLimit as its limit price.
+                        remaining = float(order.get("quantity") or 0.0)
                         order_price = float(
-                            order.get("price")
-                            or order.get("limitPrice")
+                            order.get("priceLimit")
+                            if order.get("priceLimit") is not None
+                            else order.get("price")
                             or 0.0
                         )
                         if remaining > 0 and order_price > 0:
                             open_notional += remaining * order_price
                     except (TypeError, ValueError):
                         print(
+                            "⚠️ Could not value one open order; "
+                            "live trading halted for safety."
+                        )
+                        raise SusqAPIError(
+                            "Unable to value an existing open order."
+                        )
+            print(
                             "⚠️ Could not value one open order; "
                             "live trading halted for safety."
                         )
@@ -291,6 +293,7 @@ def main() -> int:
                 spent = 0.0
                 traded = 0
                 skipped_existing = 0
+                submitted_exchanges: set[str] = set()
                 for c in candidates:
                     if spent >= args.max_cycle_cost:
                         break
@@ -302,8 +305,6 @@ def main() -> int:
                         )
                         break
                     exchange_id = str(c["exchange_id"])
-                    if exchange_id in state["orders"]:
-                        continue
                     open_capacity = max(args.max_open_cost - open_notional, 0.0)
                     cost_cap = min(
                         args.max_order_cost,
@@ -339,6 +340,7 @@ def main() -> int:
                             "stopping cycle"
                         )
                         break
+                    submitted_exchanges.add(exchange_id)
                     state["orders"][exchange_id] = {
                         "orderId": order_id,
                         "market": c["title"],
