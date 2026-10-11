@@ -29,6 +29,7 @@ Defaults:
 - maximum spread: 1.5 percentage points
 - maximum cost per order: 3,000 SUSQies
 - maximum cost per scan cycle: 3,000 SUSQies
+- maximum total notional across currently open limit orders: 6,000 SUSQies
 - refresh interval in loop mode: 300 seconds, never below 60 seconds
 - limit orders only
 - no duplicate exchange order while present in authoritative portfolio or open-order API reads
@@ -64,3 +65,6 @@ The live loop budgets the entire submitted limit-order notional, including resti
 
 ## Position reconciliation
 Before a live cycle, the bot reads the tournament portfolio positions endpoint and the open-order endpoint for the active tournament. Any exchange with a nonzero position or an open order is treated as occupied and skipped. If these authoritative reads fail, live mode halts for that cycle.
+
+
+The live loop also enforces an aggregate open-order cap. Resting limit-order notional is valued from the authoritative order read and counts against the cap; a new order is not submitted when the cap is reached.
