@@ -50,11 +50,24 @@ class SusqAPI:
             raise SusqAPIError('SUSQ_API_KEY is missing. Put it in the repo-local .env file.')
 
     def get(self, path: str, params: dict[str, Any] | None = None) -> Any:
-        query = urllib.parse.urlencode({k: v for k, v in (params or {}).items() if v is not None}, doseq=True)
+        query = urllib.parse.urlencode(
+            {k: v for k, v in (params or {}).items() if v is not None},
+            doseq=True,
+        )
         url = self.config.base_url.rstrip('/') + '/' + path.lstrip('/')
         if query:
             url += '?' + query
-        request = urllib.request.Request(url, headers={'Accept':'application/json','Authorization':f'Bearer {self.config.api_key}','User-Agent':'susquehanna-predictions-cup/0.1'}, method='GET')
+        request = urllib.request.Request(
+            url,
+            headers={
+                'Accept': 'application/json',
+                'Authorization': f'Bearer {self.config.api_key}',
+                'User-Agent': 'susquehanna-predictions-cup/0.1',
+            },
+            method='GET',
+        )
+
+        last_http_error: urllib.error.HTTPError | None = None
         for attempt in range(3):
             try:
                 ssl_context = ssl.create_default_context(cafile=certifi.where())
@@ -64,25 +77,34 @@ class SusqAPI:
                     context=ssl_context,
                 ) as response:
                     raw = response.read().decode('utf-8')
-                    data = json.loads(raw) if raw else None
-                    return data
+                    return json.loads(raw) if raw else None
             except urllib.error.HTTPError as exc:
-                retryable = exc.code in (429, 502, 503, 504)
-                if retryable and attempt < 2:
+                last_http_error = exc
+                if exc.code in (429, 502, 503, 504) and attempt < 2:
                     time.sleep(1.5 * (attempt + 1))
                     continue
-            body = exc.read().decode('utf-8', errors='replace')
-            try:
-                payload = json.loads(body)
-            except json.JSONDecodeError:
-                payload = {}
-            error = payload.get('error') if isinstance(payload, dict) else None
-            if isinstance(error, dict):
-                raise SusqAPIError(f"{error.get('code','API_ERROR')}: {error.get('message','unknown error')}") from exc
-            raise SusqAPIError(f'HTTP {exc.code}: {body}') from exc
-        except urllib.error.URLError as exc:
-            raise SusqAPIError(f'Network error: {exc}') from exc
-        return data
+
+                body = exc.read().decode('utf-8', errors='replace')
+                try:
+                    payload = json.loads(body)
+                except json.JSONDecodeError:
+                    payload = {}
+                error = payload.get('error') if isinstance(payload, dict) else None
+                if isinstance(error, dict):
+                    raise SusqAPIError(
+                        f"{error.get('code','API_ERROR')}: "
+                        f"{error.get('message','unknown error')}"
+                    ) from exc
+                raise SusqAPIError(f'HTTP {exc.code}: {body}') from exc
+            except urllib.error.URLError as exc:
+                if attempt < 2:
+                    time.sleep(1.5 * (attempt + 1))
+                    continue
+                raise SusqAPIError(f'Network error: {exc}') from exc
+
+        if last_http_error is not None:
+            raise SusqAPIError(f'HTTP {last_http_error.code}: service temporarily unavailable.') from last_http_error
+        raise SusqAPIError('Network error: request could not be completed.')
 
     def account(self) -> Any:
         return self.get('/account')
