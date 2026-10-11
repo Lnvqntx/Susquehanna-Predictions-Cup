@@ -211,12 +211,35 @@ def main() -> int:
 
     api = SusqAPI()
     state = load_state()
-    manual_signatures = existing_manual_market_signatures()
 
     while True:
         try:
             tournament, candidates = scan_once(api, args.min_edge, args.max_spread)
             balance = float(tournament.get("myBalance") or 0)
+            try:
+                live_positions = api.tournament_positions(tournament["slug"])
+                live_open_orders = api.list_orders(
+                    status="open", tournament_id=str(tournament["id"]), limit=200
+                )
+                occupied_exchanges = {
+                    str(p.get("exchangeId"))
+                    for p in live_positions
+                    if float(p.get("quantity") or 0) != 0
+                }
+                occupied_exchanges.update(
+                    str(o.get("exchangeId"))
+                    for o in live_open_orders
+                    if o.get("exchangeId") is not None
+                )
+            except SusqAPIError as exc:
+                print(f"❌ Portfolio reconciliation failed: {exc}")
+                if args.live:
+                    print("🛑 LIVE MODE HALTED: cannot prove an exchange is unoccupied.")
+                    if not args.loop:
+                        return 2
+                    time.sleep(max(60, args.interval))
+                    continue
+                occupied_exchanges = set()
             print(f"\nAUTOPILOT | {datetime.now(timezone.utc).isoformat(timespec='seconds')}")
             print(f"balance={balance:,.2f} | candidates={len(candidates)}")
 
