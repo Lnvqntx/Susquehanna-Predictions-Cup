@@ -102,6 +102,39 @@ class SusqAPI:
             if not cursor:
                 raise SusqAPIError('API reported hasMore=true but returned no nextCursor.')
 
+    def tournament_positions(self, slug: str) -> list[dict[str, Any]]:
+        payload = self.get(
+            f"/tournaments/{urllib.parse.quote(slug, safe='')}/portfolio/positions"
+        )
+        return payload.get("positions", [])
+
+    def list_orders(
+        self,
+        *,
+        status: str = "open",
+        tournament_id: str | None = None,
+        limit: int = 100,
+    ) -> list[dict[str, Any]]:
+        rows: list[dict[str, Any]] = []
+        cursor: str | None = None
+        while True:
+            payload = self.get(
+                "/orders",
+                {
+                    "status": status,
+                    "limit": max(1, min(200, limit)),
+                    "cursor": cursor,
+                    "tournamentId": tournament_id,
+                },
+            )
+            rows.extend(payload.get("data", []))
+            pagination = payload.get("pagination", {})
+            if not pagination.get("hasMore"):
+                return rows
+            cursor = pagination.get("nextCursor")
+            if not cursor:
+                raise SusqAPIError("Orders pagination hasMore=true but no nextCursor.")
+
     def price(self, exchange_id: str, tournament_id: str | None = None) -> Any:
         return self.get(f"/exchanges/{urllib.parse.quote(str(exchange_id), safe='')}/price", {'tournamentId': tournament_id})
 
