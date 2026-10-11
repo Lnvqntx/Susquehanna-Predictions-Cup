@@ -35,6 +35,20 @@ Today's leaderboard showed 3rd place around **742.9k SUSQies**; the benchmark wi
 - [ ] Increase turnover only after calibration
 
 ## Current target
+**Autonomous execution build**
+
+- [x] Discover all 237 open markets
+- [x] Bulk live-price scan
+- [x] Exact order-book inspection
+- [x] Authenticated trading key
+- [x] Guarded limit-order client
+- [x] Public forecast API adapter
+- [x] Autonomous candidate ranking + order submission
+- [ ] Add second independent forecast source
+- [ ] Backtest live snapshots and calibrate thresholds
+- [ ] Add realtime stream integration
+
+## Current target
 **Live scanner build**
 
 The manual phase has produced six live positions. The next bottleneck is throughput, so the priority is authenticated API ingestion rather than another hand-screened market.
