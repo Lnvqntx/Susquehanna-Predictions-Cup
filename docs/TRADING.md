@@ -1,20 +1,49 @@
 # Trading
 
-## Required setup
-1. Create an API key with read + trade scope. The existing scanner key is read-only.
-2. Keep the key in the repo-local .env as SUSQ_API_KEY. Never paste it into chat or commit it.
-3. The client discovers the Midterm Elections tournament and routes orders with its tournament UUID.
-4. Use src/trade.py for one reviewed limit order at a time.
-5. Limit prices must use the 0.005 tick between 0.005 and 0.995.
-6. Every order gets a client idempotency key.
+## Setup
 
-## Dry run
-python src/trade.py --exchange-id 927 --side yes --quantity 100 --price 0.300 --reason "PA-08 thesis"
+1. Create an API key with `read` + `trade` scope.
+2. Store it only in the ignored repo-local `.env` as `SUSQ_API_KEY`.
+3. Never commit or paste the key.
+4. The API client discovers the Midterm Elections tournament and routes orders with the tournament UUID.
+5. Use limit orders only.
+6. Use the exchange price tick of 0.005.
+7. Give each write an idempotency key.
 
-## Live order
-python src/trade.py --exchange-id 927 --side yes --quantity 100 --price 0.300 --reason "PA-08 thesis" --confirm
+## Reviewed single order
 
-The CLI requires an explicit CONFIRM phrase before submission.
+Dry run:
+
+`python src/trade.py --exchange-id 927 --side yes --quantity 100 --price 0.300 --reason "PA-08 thesis"`
+
+Live:
+
+`python src/trade.py --exchange-id 927 --side yes --quantity 100 --price 0.300 --reason "PA-08 thesis" --confirm`
+
+## Autonomous entry
+
+Current competition profile:
+
+`nohup caffeinate -i python -u src/autopilot.py --live --loop --interval 300 --min-edge 0.15 --max-order-cost 10000 --max-cycle-cost 10000 --max-open-cost 35000 > data/autopilot.log 2>&1 &`
+
+Run only one live instance.
+
+## Current portfolio
+
+Latest confirmed read:
+
+- 18 positions
+- ~0.085 cash
+- 99,999.94 cost basis
+- 100,842.10 summed position market value
+- rank 365 / 1,403
+
+Because cash is effectively exhausted, the next useful capability is portfolio rotation.
 
 ## Safety
-The first live trading version supports limit orders only and requires explicit confirmation. Market orders are intentionally excluded. The API documents POST /orders as a write requiring an idempotencyKey. Standard accounts have a shared per-account write budget, so multiple keys do not increase capacity.
+
+- No market orders.
+- No duplicate exchange exposure.
+- Reconcile positions and open orders before autonomous entry.
+- Reconcile ambiguous submissions before any retry.
+- Do not enable live rotation until dry-run tests pass.
