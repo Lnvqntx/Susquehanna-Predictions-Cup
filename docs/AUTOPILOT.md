@@ -1,46 +1,73 @@
 # Autonomous trader
 
-The project now has a forecast-driven autonomous loop.
+The project contains a forecast-driven autonomous **entry** loop.
 
-## Data source
+## Pipeline
 
-Polling Forecast publishes a public, read-only JSON API for the 2026 US House, Senate and governor forecasts. The API documents the fields used here, including race keys, forecast probabilities and `asOf`. The bot uses:
-- `/api/us/house`
-- `/api/us/senate`
-- `/api/us/governors`
+For each open market:
+
+1. Read live market data.
+2. Match the market to the external forecast.
+3. Compute forecast-versus-executable-price edge.
+4. Filter by edge and spread.
+5. Rank candidates.
+6. Reconcile current tournament positions and open orders.
+7. Skip exchanges that are already occupied.
+8. Size within configured budgets.
+9. Submit a limit order with an idempotency key.
+10. Reconcile ambiguous responses before any retry.
 
 ## Signal
 
-For each open Susquehanna market:
-1. Parse the state/district and party from the title.
-2. Match it to the Polling Forecast race key.
-3. Use the external party win probability.
-4. Compare it with the current executable YES ask.
-5. Require minimum edge and a tight spread.
-6. Rank by edge.
-7. In live mode, submit a limit order at the current ask.
+The current v1 probability source is the public Polling Forecast 2026 US House/Senate/Governor forecast API.
 
-This is deliberately simple. It is a v1 automated signal, not a calibrated institutional model.
+The signal is useful for ranking, but it is **not yet calibrated** and uses one external source.
+
+## Live execution profile
+
+The competition run has used:
+
+- `--interval 300`
+- `--min-edge 0.15`
+- `--max-order-cost 10000`
+- `--max-cycle-cost 10000`
+- `--max-open-cost 35000`
+
+Exact command:
+
+`nohup caffeinate -i python -u src/autopilot.py --live --loop --interval 300 --min-edge 0.15 --max-order-cost 10000 --max-cycle-cost 10000 --max-open-cost 35000 > data/autopilot.log 2>&1 &`
 
 ## Hard controls
 
-Defaults:
-- minimum edge: 10 percentage points
-- maximum spread: 1.5 percentage points
-- maximum cost per order: 3,000 SUSQies
-- maximum cost per scan cycle: 3,000 SUSQies
-- maximum total notional across currently open limit orders: 6,000 SUSQies
-- refresh interval in loop mode: 300 seconds, never below 60 seconds
 - limit orders only
-- no duplicate exchange order while present in authoritative portfolio or open-order API reads
-- live mode halts if portfolio reconciliation fails
-- client-side idempotency key on every order
+- minimum edge filter
+- maximum spread filter
+- per-order budget
+- per-cycle budget
+- aggregate open-order budget
+- minimum refresh interval
+- live position reconciliation
+- live open-order reconciliation
+- duplicate-exchange protection
+- idempotent POST requests
+- retry on transient HTTP/network failures
+- stop on unsafe or ambiguous execution state
 
-The live API key must have `read` and `trade` scopes and remain only in the local `.env`.
+## Critical state distinction
+
+`open_notional` measures **resting limit-order exposure only**.
+
+It does not include filled positions.
+
+Therefore a portfolio can have near-zero cash and zero open orders while still being fully invested.
+
+## Current behavior
+
+The last confirmed live scans found 12 ranked candidates and skipped all 12 because those exchanges were already represented in the current portfolio. This means the entry layer has reached the current portfolio-capacity bottleneck.
 
 ## Commands
 
-Analyze only:
+Read-only:
 
 `python src/autopilot.py`
 
@@ -48,26 +75,20 @@ One live cycle:
 
 `python src/autopilot.py --live`
 
-Continuous autonomous mode:
+Continuous:
 
 `python src/autopilot.py --live --loop --interval 300`
 
-The bot prints the candidates it considered before it submits anything.
+Log:
 
-## Important limitation
+`tail -100 data/autopilot.log`
 
-The v1 probability comes from one external model. It should not be interpreted as a guarantee of accuracy. Before reducing thresholds or increasing size, add a second independent forecast source and backtest the signal on saved snapshots.
+Stop:
 
+`pkill -f "src/autopilot.py"`
 
-## Additional execution guard
-The live loop budgets the entire submitted limit-order notional, including resting quantities, rather than only immediate fills. It also halts the current cycle if the API reports a filled quantity above the requested quantity or a reported fill cost more than 2% above committed notional. This prevents partial-fill behavior from accidentally opening multiple orders beyond the cycle cap.
+## Next system
 
+The next engine is a **portfolio rotator**. It must be separate from the entry engine and dry-run first.
 
-## Position reconciliation
-Before a live cycle, the bot reads the tournament portfolio positions endpoint and the open-order endpoint for the active tournament. Any exchange with a nonzero position or an open order is treated as occupied and skipped. If these authoritative reads fail, live mode halts for that cycle.
-
-
-The live loop also enforces an aggregate open-order cap. Resting limit-order notional is valued from the authoritative `GET /orders?status=open` fields (`quantity` = executable remainder, `priceLimit` = limit price) and counts against the cap; a new order is not submitted when the cap is reached.
-
-
-Execution safety: a submission response missing an order ID triggers an immediate authoritative portfolio/open-order reconciliation. The cycle stops if the exchange cannot be proven occupied, preventing blind retries.
+The rotator should compare current holdings against new opportunities, account for execution friction, and only recycle capital when the replacement is materially better.
