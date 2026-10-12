@@ -68,3 +68,6 @@ Before a live cycle, the bot reads the tournament portfolio positions endpoint a
 
 
 The live loop also enforces an aggregate open-order cap. Resting limit-order notional is valued from the authoritative `GET /orders?status=open` fields (`quantity` = executable remainder, `priceLimit` = limit price) and counts against the cap; a new order is not submitted when the cap is reached.
+
+
+Execution safety: a submission response missing an order ID triggers an immediate authoritative portfolio/open-order reconciliation. The cycle stops if the exchange cannot be proven occupied, preventing blind retries.
