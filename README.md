@@ -1,67 +1,96 @@
 # Susquehanna Predictions Cup — Quant Research
 
-Systematic research and trading framework for the 2026 Susquehanna Predictions Cup.
+Systematic research, execution, and portfolio-management framework for the 2026 Susquehanna Predictions Cup.
 
-## Live portfolio
+## Mission
 
-- Michigan Senate D: **7,812 YES @ 0.640** — **Trade #6 LIVE**
-- Rhode Island Senate D: 17,751 YES @ 0.845
-- New Hampshire Senate D: 9,467 YES @ 0.845
-- Georgia Senate R: 6,521 NO @ 0.920
-- Delaware Senate R: 5,555 NO @ 0.900
-- Texas Senate D: 5,042 YES @ 0.595
+Finish the Midterm Elections tournament in the **top 3** by final SUSQie account value.
 
-## Current objective
-Move from discretionary one-market research to a high-throughput, portfolio-aware scanner that can rank many markets by executable expected value.
+The strategic stretch target is **1,000,000+ SUSQies**. The real objective is relative leaderboard rank.
 
-## Autonomous trading
+## Current snapshot — 2026-10-12
 
-The v1 autonomous engine is in `src/autopilot.py`. It matches live Susquehanna markets to Polling Forecast's public 2026 House/Senate/Governor forecast API, ranks executable edges, and can place guarded limit orders.
+| Metric | Latest observed |
+|---|---:|
+| Starting bankroll | 100,000 SUSQies |
+| Positions | 18 |
+| Cash balance | ~0.085 SUSQies |
+| Cost basis | 99,999.94 SUSQies |
+| API-summed market value | 100,842.10 SUSQies |
+| Portfolio-page account value | 100,769 SUSQies |
+| Leaderboard rank | **365 / 1,403** |
+| Leaderboard gain shown | **+824.21 SUSQies** |
+| Portfolio-page daily P&L | **+382 SUSQies** |
 
-One scan (read-only):
+The API position sum and signed-in portfolio value were read at slightly different moments, so they are not expected to match tick-for-tick.
+
+## Current system
+
+The project now has three working layers:
+
+1. **Discovery:** scans all open tournament markets and fetches executable quotes.
+2. **Forecast ranking:** compares an external forecast probability with the executable YES ask and ranks edge opportunities.
+3. **Guarded autonomous entry:** places limit orders with live portfolio/open-order reconciliation, idempotency, duplicate-exchange protection, aggregate open-order limits, and safe transient-error behavior.
+
+The current v1 forecast is still a **single-source signal**. It is not yet a calibrated institutional probability model.
+
+## Autonomous entry
+
+Read-only:
+
 `python src/autopilot.py`
 
 One live cycle:
+
 `python src/autopilot.py --live`
 
-Continuous live mode:
-`python src/autopilot.py --live --loop --interval 300`
+Current competition profile:
 
-Default guardrails are 10 percentage-point minimum edge, 1.5 percentage-point max spread, 3,000 SUSQies maximum per order and 3,000 SUSQies maximum per cycle. The probability signal is v1 and uses one external forecast source; this is not yet a calibrated institutional model.
+`nohup caffeinate -i python -u src/autopilot.py --live --loop --interval 300 --min-edge 0.15 --max-order-cost 10000 --max-cycle-cost 10000 --max-open-cost 35000 > data/autopilot.log 2>&1 &`
 
-## Scanner
-Run from the repository root:
-python scripts/scan_snapshot.py --input data/watchlist.csv
+Profile:
 
-The scanner ranks candidates using model probability, executable price, liquidity, confidence and portfolio redundancy. It is currently snapshot-based; it does not yet submit orders automatically.
+- refresh: 300 seconds
+- minimum edge: 15 percentage points
+- maximum order notional: 10,000 SUSQies
+- maximum cycle notional: 10,000 SUSQies
+- maximum aggregate resting-order notional: 35,000 SUSQies
+- limit orders only
+
+## Current bottleneck
+
+The entry engine has already deployed essentially the full bankroll. Recent scans repeatedly found a top set of opportunities that were already represented in the portfolio.
+
+The next performance upgrade is therefore **portfolio rotation**, not blindly increasing entry size.
+
+Target architecture:
+
+`live positions → revalue → recompute edge → rank weakest exposure → scan new opportunities → compare replacement EV → rotate only when improvement clears friction + uncertainty`
+
+The rotation layer must remain dry-run until regression and historical tests pass.
 
 ## Repository layout
+
 ```text
 .
 ├── data/
-│   ├── markets.csv
-│   ├── polls.csv
-│   ├── model_inputs.csv
-│   ├── watchlist.csv
-│   └── portfolio.csv
 ├── research/
 ├── models/
-│   ├── probability.py
-│   ├── poll_weighting.py
-│   ├── calibration.py
-│   ├── scoring.py
-│   ├── orderbook.py
-│   └── portfolio.py
 ├── scripts/
-│   └── scan_snapshot.py
+├── src/
 ├── trades/
 ├── docs/
-│   └── SCANNER.md
-└── PLAN.md
+└── tests/
 ```
 
-## Status
-Phase 3: **six positions live**. The Michigan position was filled at 0.640; current liquid balance shown by the account is ~58,019 SUSQies. Scanner foundation is in place; next step is historical calibration and official API ingestion.
+## Safety
 
+- Never commit `.env`.
+- Never paste API keys into chat.
+- Reconcile current positions and open orders before live writes.
+- Never blindly retry an ambiguous order submission.
+- Never enable live rotation before dry-run tests pass.
 
-Autopilot safety: total outstanding limit-order notional is capped at 6,000 SUSQies by default (`--max-open-cost 6000`), in addition to the 3,000 SUSQie per-order and per-cycle caps.
+Run the suite with:
+
+`python -m pytest -q`
