@@ -186,30 +186,47 @@ class SusqAPI:
         if idempotency_key:
             headers["Idempotency-Key"] = idempotency_key
         url = self.config.base_url.rstrip("/") + "/" + path.lstrip("/")
-        request = urllib.request.Request(url, data=body, headers=headers, method="POST")
-        try:
-            with urllib.request.urlopen(
-                request,
-                timeout=self.config.timeout_seconds,
-                context=ssl.create_default_context(cafile=certifi.where()),
-            ) as response:
-                raw = response.read().decode("utf-8")
-                data = json.loads(raw) if raw else None
-        except urllib.error.HTTPError as exc:
-            body_text = exc.read().decode("utf-8", errors="replace")
+
+        for attempt in range(3):
+            request = urllib.request.Request(
+                url, data=body, headers=headers, method="POST"
+            )
             try:
-                payload_out = json.loads(body_text)
-            except json.JSONDecodeError:
-                payload_out = {}
-            error = payload_out.get("error") if isinstance(payload_out, dict) else None
-            if isinstance(error, dict):
-                raise SusqAPIError(
-                    f"{error.get('code','API_ERROR')}: {error.get('message','unknown error')}"
-                ) from exc
-            raise SusqAPIError(f"HTTP {exc.code}: {body_text}") from exc
-        except urllib.error.URLError as exc:
-            raise SusqAPIError(f"Network error: {exc}") from exc
-        return data
+                with urllib.request.urlopen(
+                    request,
+                    timeout=self.config.timeout_seconds,
+                    context=ssl.create_default_context(cafile=certifi.where()),
+                ) as response:
+                    raw = response.read().decode("utf-8")
+                    return json.loads(raw) if raw else None
+            except urllib.error.HTTPError as exc:
+                body_text = exc.read().decode("utf-8", errors="replace")
+                retryable = exc.code in (429, 502, 503, 504)
+                if retryable and attempt < 2:
+                    retry_after = exc.headers.get("Retry-After")
+                    try:
+                        delay = min(max(float(retry_after), 0.5), 10.0) if retry_after else 1.5 * (attempt + 1)
+                    except (TypeError, ValueError):
+                        delay = 1.5 * (attempt + 1)
+                    time.sleep(delay)
+                    continue
+                try:
+                    payload_out = json.loads(body_text)
+                except json.JSONDecodeError:
+                    payload_out = {}
+                error = payload_out.get("error") if isinstance(payload_out, dict) else None
+                if isinstance(error, dict):
+                    raise SusqAPIError(
+                        f"{error.get('code','API_ERROR')}: {error.get('message','unknown error')}"
+                    ) from exc
+                raise SusqAPIError(f"HTTP {exc.code}: {body_text}") from exc
+            except urllib.error.URLError as exc:
+                if attempt < 2:
+                    time.sleep(1.5 * (attempt + 1))
+                    continue
+                raise SusqAPIError(f"Network error: {exc}") from exc
+
+        raise SusqAPIError("Network error: request could not be completed.")
 
     def place_order(
         self,
