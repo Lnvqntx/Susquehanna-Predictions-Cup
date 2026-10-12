@@ -1,0 +1,10 @@
+observed_at_ist,metric,value,source,notes
+2026-10-12 18:15,cash_balance,0.085,authenticated_account_api,near-zero free cash
+2026-10-12 18:15,positions,18,authenticated_tournament_positions_api,filled positions
+2026-10-12 18:15,cost_basis,99999.94,authenticated_tournament_positions_api,sum of position cost basis
+2026-10-12 18:15,market_value,100842.10,authenticated_tournament_positions_api,sum of position market values
+2026-10-12 18:15,unrealized_pnl,0.00,authenticated_tournament_positions_api,sum of position unrealized PnL at read time
+2026-10-12 18:30,account_value,100769,signed_in_portfolio_page,leaderboard-account valuation snapshot
+2026-10-12 18:30,leaderboard_rank,365,signed_in_leaderboard_page,rank among 1403 observed participants
+2026-10-12 18:30,leaderboard_gain,824.21,signed_in_leaderboard_page,displayed gain
+2026-10-12 18:30,daily_pnl,382,signed_in_portfolio_page,displayed daily P&L
