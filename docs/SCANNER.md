@@ -1,22 +1,51 @@
-Market Scanner
+# Market Scanner
 
-Purpose: turn a large market universe into a ranked shortlist instead of researching markets one by one.
+Purpose: turn the full tournament market universe into a ranked shortlist instead of researching markets one by one.
 
-Pipeline:
-1. Normalize executable price and liquidity.
-2. Convert independent research into a model probability for the traded side.
-3. Compute raw edge = model probability - executable price.
-4. Penalize low confidence, thin liquidity and redundant portfolio themes.
-5. Rank candidates by a composite score.
-6. Simulate the order-book fill before submitting a trade.
+## Pipeline
 
-Current scanner command:
-python scripts/scan_snapshot.py --input data/watchlist.csv
+1. Read the live market universe.
+2. Normalize executable prices and liquidity.
+3. Match markets to probability estimates.
+4. Compute raw edge.
+5. Penalize weak confidence, thin liquidity, and redundant portfolio themes.
+6. Rank candidates.
+7. Pass qualified candidates to the guarded execution engine.
 
-The snapshot scanner is intentionally offline. It does not pretend that stale data are live.
+## Current live capability
 
-API phase: Susquehanna's documentation says participant API keys can be used for automated strategies. The October 2026 changelog says scripts should use the v1 API rather than scraping website endpoints, that /api/v1/exchanges/prices supports bulk reads for up to 100 exchange IDs, and that realtime market updates require a realtime token. Periodic REST refreshes are recommended because delayed realtime batches can be dropped. Source: Susquehanna docs and changelog.
+The authenticated scanner can:
 
-Never commit an API key. Put it in a local environment variable or ignored .env file.
+- discover the Midterm Elections tournament;
+- scan the open market universe;
+- fetch live exchange quotes;
+- save JSON/CSV snapshots;
+- feed candidates to the autonomous entry engine.
 
-Next engineering step: add the official API adapter after confirming the exact API schemas in the account's API Reference. The model layer is deliberately independent of the data transport layer, so the scanner can be tested on snapshots first.
+Read-only scan:
+
+`python src/scan_live.py --limit-markets 0 --top 40`
+
+Autonomous entry:
+
+`python src/autopilot.py`
+
+## Current limitation
+
+The probability signal is still v1 and comes from one external forecast source. It is not historically calibrated.
+
+Model roadmap:
+
+- second independent forecast source;
+- pollster/recency weighting;
+- structural state/district baseline;
+- historical calibration;
+- out-of-sample edge-threshold testing.
+
+## Portfolio awareness
+
+Execution already reconciles current positions and open orders and skips occupied exchanges.
+
+The next scanner upgrade is to expose current-position edge decay so the portfolio rotator can compare new opportunities against capital already deployed.
+
+Never commit API credentials.
