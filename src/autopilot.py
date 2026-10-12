@@ -298,6 +298,9 @@ def main() -> int:
                         )
                         break
                     exchange_id = str(c["exchange_id"])
+                    if exchange_id in occupied_exchanges or exchange_id in submitted_exchanges:
+                        skipped_existing += 1
+                        continue
                     open_capacity = max(args.max_open_cost - open_notional, 0.0)
                     cost_cap = min(
                         args.max_order_cost,
@@ -317,9 +320,43 @@ def main() -> int:
                     except (SusqAPIError, ValueError) as exc:
                         print(f"❌ {c['title']}: {exc}")
                         continue
+                    if not isinstance(result, dict):
+                        print("🛑 ORDER RESPONSE INVALID: stopping cycle.")
+                        break
                     filled = int(result.get("quantityTraded") or 0)
                     reported_cost = float(result.get("totalCost") or 0)
                     order_id = str(result.get("orderId") or "")
+                    if not order_id:
+                        print(
+                            f"🛑 ORDER RESPONSE MISSING ID | {c['title']} | "
+                            "reconciling live state before any retry."
+                        )
+                        try:
+                            verify_positions = api.tournament_positions(tournament["slug"])
+                            verify_orders = api.list_orders(
+                                status="open", tournament_id=str(tournament["id"]), limit=200
+                            )
+                            occupied_verify = {
+                                str(p.get("exchangeId"))
+                                for p in verify_positions
+                                if float(p.get("quantity") or 0) != 0
+                            }
+                            occupied_verify.update(
+                                str(o.get("exchangeId"))
+                                for o in verify_orders
+                                if o.get("exchangeId") is not None
+                            )
+                        except SusqAPIError as exc:
+                            print(f"🛑 RECONCILIATION FAILED AFTER ORDER: {exc}")
+                            break
+                        if exchange_id not in occupied_verify:
+                            print("🛑 No authoritative evidence of the order; stopping cycle.")
+                            break
+                        occupied_exchanges.add(exchange_id)
+                        submitted_exchanges.add(exchange_id)
+                        skipped_existing += 1
+                        print(f"✅ ORDER VERIFIED VIA RECONCILIATION | {c['title']} | exchange={exchange_id}")
+                        break
                     if filled > requested_quantity:
                         print(
                             f"🛑 EXECUTION ANOMALY | {c['title']} | "
