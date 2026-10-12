@@ -325,11 +325,17 @@ def main() -> int:
                         break
                     filled = int(result.get("quantityTraded") or 0)
                     reported_cost = float(result.get("totalCost") or 0)
-                    order_id = str(result.get("orderId") or "")
+                    raw_order_id = result.get("orderId")
+                    order_id = str(raw_order_id) if raw_order_id is not None else ""
+
+                    # orderId is nullable in the documented placement response.
+                    # A null ID is therefore not an error by itself. Reconcile the
+                    # authoritative position/open-order state before allowing the
+                    # cycle to continue, so we never blindly resubmit.
                     if not order_id:
                         print(
-                            f"🛑 ORDER RESPONSE MISSING ID | {c['title']} | "
-                            "reconciling live state before any retry."
+                            f"⚠️ ORDER RESPONSE HAS NO ID | {c['title']} | "
+                            "reconciling before any further trade."
                         )
                         try:
                             verify_positions = api.tournament_positions(tournament["slug"])
@@ -354,8 +360,14 @@ def main() -> int:
                             break
                         occupied_exchanges.add(exchange_id)
                         submitted_exchanges.add(exchange_id)
-                        skipped_existing += 1
-                        print(f"✅ ORDER VERIFIED VIA RECONCILIATION | {c['title']} | exchange={exchange_id}")
+                        # The order is proven to exist, so record the exchange as
+                        # occupied and end this cycle rather than making another
+                        # placement against an ambiguous response.
+                        print(
+                            f"✅ ORDER VERIFIED VIA RECONCILIATION | "
+                            f"{c['title']} | exchange={exchange_id} | "
+                            f"filled={filled} | reportedCost={reported_cost:.2f}"
+                        )
                         break
                     if filled > requested_quantity:
                         print(
