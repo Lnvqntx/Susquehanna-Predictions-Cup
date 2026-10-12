@@ -1,75 +1,94 @@
-# TOP 3 MISSION
+# TOP 3 MISSION — EXECUTION PLAN
 
 ## Objective
-Finish the 2026 Midterm Elections Predictions Cup in the **top 3** by final SUSQie balance.
 
-Today's leaderboard showed 3rd place around **742.9k SUSQies**; the benchmark will move, so the strategic target is **1,000,000+**.
+Finish the 2026 Midterm Elections Predictions Cup in the **top 3** by final SUSQie account value.
 
-## Operating rules
-1. Prefer repeatable positive-EV situations.
-2. Trade only at verified executable prices.
-3. Use order-book-aware sizing.
-4. Penalize portfolio-redundant trades.
-5. Keep capital available for new mispricings.
-6. Record every fill and probability.
-7. Rotate capital when the edge disappears.
+## Current state — 2026-10-12
 
-## Portfolio
-- Rhode Island Senate D YES — LIVE
-- New Hampshire Senate D YES — LIVE
-- Georgia Senate R NO — LIVE
-- Delaware Senate R NO — LIVE
-- Texas Senate D YES — LIVE
+- Leaderboard: **365 / 1,403**
+- Displayed leaderboard gain: **+824.21 SUSQies**
+- Positions: **18**
+- Cash: **~0.085 SUSQies**
+- Cost basis: **99,999.94 SUSQies**
+- API-summed market value: **100,842.10 SUSQies**
+- Entry autopilot: **live-tested**
+- Portfolio: **effectively fully deployed**
+- Next bottleneck: **portfolio rotation + model calibration**
 
-## Progress
-- [x] Build repository
-- [x] Build probability scaffolding
-- [x] Build market ranking/scoring
-- [x] Execute 5 trades
-- [x] Build order-book fill logic
-- [x] Add portfolio-aware scoring
-- [x] Reject Maine despite an initially attractive forecast discrepancy
-- [ ] Build historical calibration layer
-- [ ] Build live API adapter
-- [ ] Reach 10+ validated markets
-- [ ] Increase turnover only after calibration
+## Completed
 
-## Current target
-**Autonomous execution build**
-
-- [x] Discover all 237 open markets
-- [x] Bulk live-price scan
+- [x] Repository and research structure
+- [x] Probability/model scaffolding
+- [x] Market ranking/scoring
+- [x] Manual research workflow
+- [x] Order-book fill simulation
+- [x] Authenticated API client
+- [x] Bulk live market scan
 - [x] Exact order-book inspection
-- [x] Authenticated trading key
-- [x] Guarded limit-order client
-- [x] Public forecast API adapter
-- [x] Autonomous candidate ranking + order submission
-- [ ] Add second independent forecast source
-- [ ] Backtest live snapshots and calibrate thresholds
-- [ ] Add realtime stream integration
+- [x] Guarded limit-order submission
+- [x] Idempotent writes
+- [x] Position/open-order reconciliation
+- [x] Duplicate-exchange protection
+- [x] Aggregate resting-order cap
+- [x] Transient API retry handling
+- [x] Autonomous entry ranking + execution
+- [x] Regression tests for execution guards
 
-## Current target
-**Live scanner build**
+## Phase 4 — Portfolio rotation
 
-The manual phase has produced six live positions. The next bottleneck is throughput, so the priority is authenticated API ingestion rather than another hand-screened market.
+### Goal
 
-- [x] Build API transport scaffold
-- [x] Build bulk-price reader
-- [x] Build snapshot scanner
-- [x] Build order-book fill simulator
-- [ ] Verify authenticated API schema from the account's API Reference
-- [ ] Populate exchange/market IDs
-- [ ] Run first live 100-exchange scan
-- [ ] Add 60–120 second refresh loop
-- [ ] Connect probabilities + scoring to live prices
-- [ ] Validate 10+ live candidates manually
-- [ ] Only then enable any automated order path
+Recycle capital from weaker positions into materially stronger opportunities.
 
-The current Susquehanna API docs state that scripted strategies are permitted and that the v1 API supports bulk price reads for up to 100 exchange IDs; normal accounts have 100 reads/minute and 30 writes/minute. Realtime market channels require a realtime token and dropped delayed batches should trigger REST refreshes. citeturn822835search0turn314656search6
+Required sequence:
 
-## Current target
-**Live API scan — blocked only on API-key/schema verification.**
+1. Read every current position.
+2. Revalue each position at an executable price.
+3. Recompute current model probability and edge.
+4. Score existing positions for edge decay, concentration, and uncertainty.
+5. Scan all open markets for new opportunities.
+6. Compare each new opportunity against the weakest eligible holding.
+7. Rotate only when expected improvement clears execution friction and an uncertainty buffer.
+8. Log and dry-run the complete sell→buy sequence.
+9. Enable live rotation only after tests pass.
 
-Michigan has a stronger and more coherent model cluster than Maine, but the live Susquehanna price is unknown. Obtain the live order book before acting.
+### Non-negotiable rules
 
-**Rule:** research first, execute second.
+- Never sell simply because price fell.
+- Never rotate into a weaker expected-value trade.
+- Never trade from stale prices.
+- Never create duplicate exchange exposure.
+- Never retry an ambiguous write without live reconciliation.
+
+## Modeling upgrades
+
+### Calibration
+- [ ] Timestamp probability/price snapshots
+- [ ] Historical calibration
+- [ ] Brier score and log loss
+- [ ] Uncertainty by race type
+- [ ] Out-of-sample threshold tuning
+
+### Forecast ensemble
+- [ ] Add a second independent forecast source
+- [ ] Add pollster/recency weighting
+- [ ] Add structural state/district baseline
+- [ ] Blend forecasts transparently
+- [ ] Penalize source disagreement
+
+### Execution
+- [x] Limit-order execution
+- [x] Partial-fill handling
+- [x] Position reconciliation
+- [x] Open-order reconciliation
+- [x] Idempotent writes
+- [x] Aggregate open-order budget
+- [x] Duplicate-exchange guard
+- [ ] Portfolio rotation
+- [ ] Stale-order management
+- [ ] Realtime market stream
+
+## Operating rule
+
+**Research first. Execute second. Rotate only when the replacement is demonstrably better.**
