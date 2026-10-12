@@ -1,29 +1,72 @@
 # Live API Bootstrap
 
-Official October 2026 changelog notes:
-- Scripts and bots should use the v1 API rather than website endpoints.
-- Normal accounts have an account-level budget of 100 reads/minute and 30 writes/minute.
-- The bulk prices endpoint accepts up to 100 exchange IDs per call.
-- Realtime channels require a realtime token from POST /api/v1/realtime/token.
-- Delayed realtime batches can be dropped, so clients should periodically refresh REST state.
+## Current implementation status
 
-Implementation status:
-- transport client: added
-- secret handling: added
-- bulk-price method: added
-- snapshot writer: added
-- exchange-ID manifest: waiting for verified mapping
-- exact response schema: waiting for API Reference verification
-- automated order submission: intentionally disabled
+The authenticated v1 API layer is operational for the competition entry workflow.
 
-Setup:
-1. Create an API key in the Susquehanna profile.
-2. Keep it local as SUSQ_API_KEY. Do not paste it into chat or commit it.
-3. Verify the exact API Reference query/response schema.
-4. Populate data/exchange_ids.txt.
-5. Run: python src/scan_live.py
+- [x] v1 transport client
+- [x] local secret handling
+- [x] bulk price reads
+- [x] tournament discovery
+- [x] tournament positions
+- [x] open-order reads
+- [x] order-book reads
+- [x] limit-order submission
+- [x] idempotent writes
+- [x] transient retry behavior
+- [x] live position/open-order reconciliation
+- [x] autonomous entry execution
 
-Source: Susquehanna official changelog, October 2026.
+The project no longer treats authenticated order submission as a blocked phase.
 
-## Important
-The transport layer currently keeps the price-ID query parameter and response parsing configurable because the exact authenticated API Reference schema could not be verified from public indexing. Do not treat the scaffold as production-ready until the account's API Reference confirms the request and response fields.
+## Setup
+
+Create an API key from the Susquehanna profile with:
+
+- `read`
+- `trade`
+
+Store it locally as `SUSQ_API_KEY` in the ignored `.env` file.
+
+Never commit `.env`.
+
+## Validation
+
+API smoke test:
+
+`python src/api_smoke_test.py`
+
+Live-market scan:
+
+`python src/scan_live.py --limit-markets 0 --top 40`
+
+Read-only autopilot:
+
+`python src/autopilot.py`
+
+## Execution model
+
+Live entry uses:
+
+- tournament-scoped routing
+- limit prices on the supported tick
+- client idempotency keys
+- current position reconciliation
+- current open-order reconciliation
+- duplicate-exchange protection
+- aggregate resting-order exposure limits
+- safe transient retry behavior
+
+## Current boundary
+
+Authentication and basic trading are complete.
+
+The next engineering work is portfolio-state management:
+
+1. revalue existing positions;
+2. calculate current edge decay;
+3. compare existing positions against new opportunities;
+4. dry-run capital rotations;
+5. only then enable live rotation.
+
+Realtime streaming and a multi-source calibrated probability model remain later upgrades.
