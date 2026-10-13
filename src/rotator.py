@@ -624,13 +624,26 @@ def _execute_rotation(
         f"filled={buy_result.get('quantityTraded')} "
         f"remaining={buy_result.get('remainingQuantity')}"
     )
-    print("\n✅ ROTATION COMPLETE: sell was reconciled before replacement buy.")
+    _, final_positions, final_open_orders = _fresh_tournament_state(api)
+    final_sold = _position_for_exchange(final_positions, plan.sell_exchange_id)
+    final_bought = _position_for_exchange(final_positions, plan.buy_exchange_id)
+
+    print("\n✅ ROTATION ORDERS SUBMITTED")
+    print(
+        f"   sell_position_remaining="
+        f"{int(_number(final_sold.get('quantity'))) if final_sold else 0:,}"
+    )
+    print(
+        f"   buy_position_now="
+        f"{int(_number(final_bought.get('quantity'))) if final_bought else 0:,}"
+    )
+    print(f"   open_orders_now={len(final_open_orders)}")
     return 0
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Portfolio rotation analyzer. Live rotation is intentionally disabled pending dry-run validation."
+        description="Portfolio rotation analyzer with guarded two-leg live execution."
     )
     parser.add_argument("--min-edge", type=float, default=0.05)
     parser.add_argument("--max-spread", type=float, default=0.02)
@@ -641,7 +654,7 @@ def main() -> int:
     parser.add_argument(
         "--live",
         action="store_true",
-        help="Reserved for future live rotation; currently rejected for safety.",
+        help="Execute a freshly recomputed rotation after explicit ROTATE confirmation.",
     )
     args = parser.parse_args()
 
