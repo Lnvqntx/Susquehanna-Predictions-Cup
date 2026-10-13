@@ -252,7 +252,19 @@ def make_rotation_plan(
         return None
 
     weakest = min(eligible, key=lambda p: p.hold_return)
-    available = [o for o in opportunities if o.exchange_id != weakest.exchange_id]
+
+    # A candidate must not already exist anywhere in the current portfolio.
+    # This is deliberately enforced again here (in addition to scan-time
+    # filtering) so a malformed/stale candidate list can never create a
+    # same-exchange or same-market rotation.
+    occupied_exchanges = {p.exchange_id for p in positions}
+    occupied_markets = {p.market_id for p in positions if p.market_id}
+    available = [
+        o
+        for o in opportunities
+        if o.exchange_id not in occupied_exchanges
+        and (not o.market_id or o.market_id not in occupied_markets)
+    ]
     if not available:
         return None
 
