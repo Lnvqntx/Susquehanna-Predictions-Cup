@@ -84,8 +84,8 @@ def _sell_price(side: str, quote: dict[str, Any]) -> float | None:
     ask = quote.get("bestAsk")
     try:
         if side == "YES":
-            return float(bid) if bid is not None else None
-        return (1.0 - float(ask)) if ask is not None else None
+            return round(float(bid), 3) if bid is not None else None
+        return round(1.0 - float(ask), 3) if ask is not None else None
     except (TypeError, ValueError):
         return None
 
@@ -167,6 +167,7 @@ def build_opportunities(
     quotes: list[dict[str, Any]],
     forecasts: dict[str, dict[str, Any]],
     occupied_exchanges: set[str],
+    occupied_markets: set[str],
     min_edge: float,
     max_spread: float,
 ) -> list[Opportunity]:
@@ -175,7 +176,12 @@ def build_opportunities(
 
     for row in rows:
         exchange_id = str(row.get("exchange_id") or "")
-        if not exchange_id or exchange_id in occupied_exchanges:
+        market_id = str(row.get("market_id") or "")
+        if (
+            not exchange_id
+            or exchange_id in occupied_exchanges
+            or market_id in occupied_markets
+        ):
             continue
 
         title = str(row.get("title") or "")
@@ -316,6 +322,11 @@ def run_scan(
         for o in open_orders
         if o.get("exchangeId") is not None
     )
+    occupied_markets = {
+        str(p.get("marketId"))
+        for p in positions_raw
+        if p.get("marketId") is not None and _number(p.get("quantity")) != 0
+    }
 
     forecasts = fetch_forecasts()
     positions = load_positions(positions_raw, forecasts, quote_map)
@@ -324,6 +335,7 @@ def run_scan(
         quote_rows,
         forecasts,
         occupied,
+        occupied_markets,
         min_edge=min_edge,
         max_spread=max_spread,
     )
