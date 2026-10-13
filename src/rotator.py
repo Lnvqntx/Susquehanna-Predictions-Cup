@@ -168,9 +168,9 @@ def build_opportunities(
     forecasts: dict[str, dict[str, Any]],
     occupied_exchanges: set[str],
     occupied_markets: set[str],
-    occupied_races: set[tuple[str, str]] | None = None,
     min_edge: float = 0.05,
-    max_spread: float,
+    max_spread: float = 0.02,
+    occupied_races: set[tuple[str, str]] | None = None,
 ) -> list[Opportunity]:
     rows = build_rows(markets, quotes)
     occupied_races = occupied_races or set()
@@ -359,9 +359,9 @@ def run_scan(
         forecasts,
         occupied,
         occupied_markets,
-        occupied_races,
         min_edge=min_edge,
         max_spread=max_spread,
+        occupied_races=occupied_races,
     )
     plan = make_rotation_plan(
         positions,
