@@ -89,6 +89,12 @@ Stop:
 
 ## Next system
 
-The next engine is a **portfolio rotator**. It must be separate from the entry engine and dry-run first.
+The portfolio rotator is now a separate execution path from the entry autopilot.
 
-The rotator should compare current holdings against new opportunities, account for execution friction, and only recycle capital when the replacement is materially better.
+It compares current holdings against new opportunities and only recycles capital when the replacement is materially better.
+
+Live rotation command:
+
+`python src/rotator.py --live --confirm`
+
+The entry loop and rotation loop should not be run concurrently unless their state coordination is explicitly verified.
