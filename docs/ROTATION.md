@@ -72,3 +72,6 @@ A sell that produces no verified usable cash causes the BUY leg to be skipped.
 - Never rotate into an exchange already represented in the live portfolio/open orders.
 - Use executable prices, not last-trade prices.
 - Respect uncertainty and forecast disagreement.
+
+
+Live execution is allowed to produce partial fills. A successful run means both order legs were submitted safely; it does not imply that the entire requested quantity filled immediately. The program prints the post-submit remaining position and open-order state.
