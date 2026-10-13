@@ -57,6 +57,7 @@ There is deliberately no `--live` execution path until that sequence has regress
 - Holding loss/gain is not a reason by itself to sell.
 - Only current expected return matters.
 - Never replace a position with a weaker expected return.
+- Do not rotate into another exchange inside an underlying market already held; this avoids correlated same-race churn.
 - Never rotate into an exchange already represented in the live portfolio/open orders.
 - Use executable prices, not last-trade prices.
 - Respect uncertainty and forecast disagreement.
