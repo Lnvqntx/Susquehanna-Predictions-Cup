@@ -141,3 +141,35 @@ def test_rotation_plan_rejects_candidate_already_in_portfolio():
         forecast_asof=None,
     )
     assert make_rotation_plan([old], [same_market], min_improvement=0.0) is None
+
+
+def test_rotation_blocks_opposite_party_market_for_same_underlying_race():
+    from src.rotator import build_opportunities
+
+    markets = [
+        {
+            "id": "214",
+            "title": "Will the Democratic Party win the IA-01 House race?",
+            "status": "open",
+            "categories": [],
+            "exchanges": [{"id": "904", "option": "YES", "initialPrice": 0.50}],
+        }
+    ]
+    quotes = [
+        {"exchangeId": "904", "latestPrice": 0.165, "bestBid": 0.160, "bestAsk": 0.165, "spread": 0.005}
+    ]
+    forecasts = {
+        "IA-01": {"asOf": None, "rating": None, "democratic": 0.50, "republican": 0.50}
+    }
+
+    opportunities = build_opportunities(
+        markets,
+        quotes,
+        forecasts,
+        occupied_exchanges=set(),
+        occupied_markets=set(),
+        occupied_races={("house", "IA-01")},
+        min_edge=0.01,
+        max_spread=0.02,
+    )
+    assert opportunities == []
