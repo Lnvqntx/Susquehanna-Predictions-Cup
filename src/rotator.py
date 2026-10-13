@@ -168,6 +168,7 @@ def build_opportunities(
     forecasts: dict[str, dict[str, Any]],
     occupied_exchanges: set[str],
     occupied_markets: set[str],
+    occupied_races: set[tuple[str, str]],
     min_edge: float,
     max_spread: float,
 ) -> list[Opportunity]:
@@ -187,6 +188,8 @@ def build_opportunities(
         title = str(row.get("title") or "")
         party = party_from_title(title)
         parsed = race_key(title)
+        if parsed and (parsed[0], parsed[1]) in occupied_races:
+            continue
         if not party or not parsed:
             continue
 
@@ -339,6 +342,13 @@ def run_scan(
         for p in positions_raw
         if p.get("marketId") is not None and _number(p.get("quantity")) != 0
     }
+    occupied_races: set[tuple[str, str]] = set()
+    for p in positions_raw:
+        if _number(p.get("quantity")) == 0:
+            continue
+        parsed = race_key(str(p.get("marketTitle") or ""))
+        if parsed:
+            occupied_races.add((parsed[0], parsed[1]))
 
     forecasts = fetch_forecasts()
     positions = load_positions(positions_raw, forecasts, quote_map)
@@ -348,6 +358,7 @@ def run_scan(
         forecasts,
         occupied,
         occupied_markets,
+        occupied_races,
         min_edge=min_edge,
         max_spread=max_spread,
     )
@@ -371,7 +382,7 @@ def run_scan(
 def print_report(report: dict[str, Any], top: int) -> None:
     print(f"ROTATOR | {report['observed_at']}")
     print(
-        f"cash={report['cash']:,.2f} | positions={len(report['positions'])} | "
+        f"cash={report['cash']:,.2f} | analyzed_positions={len(report['positions'])} | "
         f"open_orders={report['open_orders']}"
     )
 
