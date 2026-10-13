@@ -40,17 +40,28 @@ The report itself contains the exact proposed SELL and BUY quantities/prices.
 
 ### Phase 3 — live
 
-**Disabled for now.**
+Live rotation is now implemented behind an explicit confirmation gate:
 
-Live rotation requires a two-step, reconciled sequence:
+`python src/rotator.py --live --confirm`
 
-1. submit SELL;
-2. reconcile the resulting position/cash state;
-3. compute the actually available proceeds;
-4. submit BUY;
-5. reconcile again.
+The CLI will recompute the current report first, show the proposed SELL → BUY, then require typing:
 
-There is deliberately no `--live` execution path until that sequence has regression coverage.
+`ROTATE`
+
+before submitting anything.
+
+The live sequence is:
+
+1. revalidate the exact position and replacement availability;
+2. re-read the sell quote;
+3. submit the SELL limit order with an idempotency key;
+4. reconcile the actual position decrease and released tournament cash;
+5. re-read the replacement BUY quote;
+6. revalidate that the replacement exchange is still unoccupied;
+7. submit the BUY only from **actually released cash**;
+8. report the resulting order IDs/fills.
+
+A sell that produces no verified usable cash causes the BUY leg to be skipped.
 
 ## Important
 
