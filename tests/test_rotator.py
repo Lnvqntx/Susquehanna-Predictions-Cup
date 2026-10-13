@@ -111,3 +111,33 @@ def test_rotation_does_not_choose_an_opportunity_from_an_already_held_market():
         max_spread=0.02,
     )
     assert opportunities == []
+
+
+def test_rotation_plan_rejects_candidate_already_in_portfolio():
+    old = PositionView(
+        exchange_id="903",
+        market_id="214",
+        title="Will the Republican Party win the IA-01 House race?",
+        side="YES",
+        quantity=100,
+        avg_cost=0.16,
+        current_price=0.16,
+        market_value=16.0,
+        cost_basis=16.0,
+        model_probability=0.50,
+        executable_exit_price=0.15,
+        hold_return=_expected_return(0.50, 0.15),
+    )
+    same_market = Opportunity(
+        exchange_id="903",
+        market_id="214",
+        title="Will the Republican Party win the IA-01 House race?",
+        side="NO",
+        model_probability=0.50,
+        executable_buy_price=0.165,
+        edge=0.335,
+        expected_return=_expected_return(0.50, 0.165),
+        spread=0.005,
+        forecast_asof=None,
+    )
+    assert make_rotation_plan([old], [same_market], min_improvement=0.0) is None
