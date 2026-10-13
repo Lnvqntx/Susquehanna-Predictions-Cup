@@ -168,11 +168,12 @@ def build_opportunities(
     forecasts: dict[str, dict[str, Any]],
     occupied_exchanges: set[str],
     occupied_markets: set[str],
-    occupied_races: set[tuple[str, str]],
-    min_edge: float,
+    occupied_races: set[tuple[str, str]] | None = None,
+    min_edge: float = 0.05,
     max_spread: float,
 ) -> list[Opportunity]:
     rows = build_rows(markets, quotes)
+    occupied_races = occupied_races or set()
     out: list[Opportunity] = []
 
     for row in rows:
