@@ -4,6 +4,7 @@ import argparse
 import json
 import math
 import sys
+import time
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -429,6 +430,204 @@ def print_report(report: dict[str, Any], top: int) -> None:
     )
 
 
+def _fresh_tournament_state(api: SusqAPI) -> tuple[dict[str, Any], list[dict[str, Any]], list[dict[str, Any]]]:
+    tournament = discover_midterm_tournament(api)
+    positions = api.tournament_positions(tournament["slug"])
+    orders = api.list_orders(
+        status="open",
+        tournament_id=str(tournament["id"]),
+        limit=200,
+    )
+    return tournament, positions, orders
+
+
+def _position_for_exchange(positions: list[dict[str, Any]], exchange_id: str) -> dict[str, Any] | None:
+    for position in positions:
+        if str(position.get("exchangeId")) == str(exchange_id) and _number(position.get("quantity")) > 0:
+            return position
+    return None
+
+
+def _account_cash(api: SusqAPI, tournament_slug: str) -> float:
+    tournament = api.tournament(tournament_slug)
+    return _number(tournament.get("myBalance"))
+
+
+def _reconcile_sell(
+    api: SusqAPI,
+    tournament_slug: str,
+    exchange_id: str,
+    starting_quantity: int,
+    starting_cash: float,
+    timeout_seconds: float = 20.0,
+) -> tuple[int, float]:
+    deadline = time.monotonic() + timeout_seconds
+    while time.monotonic() < deadline:
+        positions = api.tournament_positions(tournament_slug)
+        remaining_position = _position_for_exchange(positions, exchange_id)
+        remaining_quantity = int(_number(remaining_position.get("quantity"))) if remaining_position else 0
+        cash = _account_cash(api, tournament_slug)
+        filled = max(0, starting_quantity - remaining_quantity)
+        if filled > 0 or cash > starting_cash + 1e-9:
+            return filled, max(0.0, cash - starting_cash)
+        time.sleep(2.0)
+    positions = api.tournament_positions(tournament_slug)
+    remaining_position = _position_for_exchange(positions, exchange_id)
+    remaining_quantity = int(_number(remaining_position.get("quantity"))) if remaining_position else 0
+    cash = _account_cash(api, tournament_slug)
+    return max(0, starting_quantity - remaining_quantity), max(0.0, cash - starting_cash)
+
+
+def _execute_rotation(
+    api: SusqAPI,
+    plan: RotationPlan,
+    tournament: dict[str, Any],
+    positions: list[dict[str, Any]],
+    open_orders: list[dict[str, Any]],
+) -> int:
+    tournament_id = str(tournament["id"])
+    slug = str(tournament["slug"])
+
+    # Revalidate the exact position before submitting the sell.
+    position = _position_for_exchange(positions, plan.sell_exchange_id)
+    if position is None:
+        print("🛑 LIVE ABORT: sell position no longer exists.")
+        return 2
+    current_qty = int(_number(position.get("quantity")))
+    if current_qty < plan.sell_quantity:
+        print(
+            f"🛑 LIVE ABORT: position shrank from planned {plan.sell_quantity:,} "
+            f"to {current_qty:,} contracts."
+        )
+        return 2
+
+    if any(str(o.get("exchangeId")) == plan.buy_exchange_id for o in open_orders):
+        print("🛑 LIVE ABORT: replacement exchange has an open order.")
+        return 2
+
+    # Re-read both legs immediately before writing anything.
+    sell_quote = api.price(plan.sell_exchange_id, tournament_id=tournament_id)
+    buy_quote = api.price(plan.buy_exchange_id, tournament_id=tournament_id)
+    sell_px = _sell_price(plan.sell_side, sell_quote)
+    if sell_px is None or sell_px <= 0:
+        print("🛑 LIVE ABORT: no executable sell price.")
+        return 2
+
+    # For a YES/NO binary contract, a side-specific executable price is valid
+    # on the 0.005 tick. Re-normalize before submission.
+    sell_px = round(sell_px / 0.005) * 0.005
+    sell_px = round(sell_px, 3)
+
+    starting_cash = _account_cash(api, slug)
+    if starting_cash < -1e-9:
+        print("🛑 LIVE ABORT: invalid negative tournament cash.")
+        return 2
+
+    sell_key = "rot-sell-" + __import__("secrets").token_urlsafe(24)
+    try:
+        sell_result = api.place_order(
+            exchange_id=plan.sell_exchange_id,
+            side=plan.sell_side.lower(),
+            action="sell",
+            quantity=plan.sell_quantity,
+            price=sell_px,
+            tournament_id=tournament_id,
+            idempotency_key=sell_key,
+        )
+    except SusqAPIError as exc:
+        print(f"🛑 LIVE SELL FAILED: {exc}")
+        return 2
+
+    if not isinstance(sell_result, dict):
+        print("🛑 LIVE ABORT: sell response was not a JSON object.")
+        return 2
+
+    print("\n✅ SELL SUBMITTED")
+    print(f"   exchange={plan.sell_exchange_id} side={plan.sell_side} qty={plan.sell_quantity:,} limit={sell_px:.3f}")
+    print(
+        f"   orderId={sell_result.get('orderId')} "
+        f"filled={sell_result.get('quantityTraded')} "
+        f"remaining={sell_result.get('remainingQuantity')}"
+    )
+
+    filled, cash_released = _reconcile_sell(
+        api,
+        slug,
+        plan.sell_exchange_id,
+        plan.sell_quantity,
+        starting_cash,
+    )
+    print(f"   reconciled_filled={filled:,} cash_released={cash_released:,.2f}")
+
+    if filled <= 0 or cash_released <= 0:
+        print("🛑 LIVE ABORT: sell produced no verified usable cash; BUY not submitted.")
+        return 2
+
+    # Re-read the replacement quote after the sell. Do not use the stale report
+    # price to fund the buy.
+    buy_quote = api.price(plan.buy_exchange_id, tournament_id=tournament_id)
+    buy_yes_bid = buy_quote.get("bestBid")
+    buy_yes_ask = buy_quote.get("bestAsk")
+    if plan.buy_side == "YES":
+        raw_buy_px = buy_yes_ask
+    else:
+        raw_buy_px = (1.0 - float(buy_yes_bid)) if buy_yes_bid is not None else None
+
+    if raw_buy_px is None:
+        print("🛑 LIVE ABORT: no executable replacement buy price.")
+        return 2
+
+    buy_px = round(float(raw_buy_px) / 0.005) * 0.005
+    buy_px = round(buy_px, 3)
+    if buy_px <= 0 or buy_px >= 1:
+        print("🛑 LIVE ABORT: invalid replacement buy price.")
+        return 2
+
+    buy_qty = math.floor(cash_released / buy_px)
+    if buy_qty <= 0:
+        print("🛑 LIVE ABORT: released cash cannot purchase one replacement contract.")
+        return 2
+
+    # Reconcile once more immediately before the buy to ensure no one else (or
+    # another local process) has occupied the exchange.
+    _, latest_positions, latest_open_orders = _fresh_tournament_state(api)
+    if _position_for_exchange(latest_positions, plan.buy_exchange_id) is not None:
+        print("🛑 LIVE ABORT: replacement exchange became occupied before BUY.")
+        return 2
+    if any(str(o.get("exchangeId")) == plan.buy_exchange_id for o in latest_open_orders):
+        print("🛑 LIVE ABORT: replacement exchange now has an open order.")
+        return 2
+
+    buy_key = "rot-buy-" + __import__("secrets").token_urlsafe(24)
+    try:
+        buy_result = api.place_order(
+            exchange_id=plan.buy_exchange_id,
+            side=plan.buy_side.lower(),
+            action="buy",
+            quantity=buy_qty,
+            price=buy_px,
+            tournament_id=tournament_id,
+            idempotency_key=buy_key,
+        )
+    except SusqAPIError as exc:
+        print(f"🛑 LIVE BUY FAILED: {exc}")
+        return 2
+
+    if not isinstance(buy_result, dict):
+        print("🛑 LIVE ABORT: buy response was not a JSON object.")
+        return 2
+
+    print("\n✅ BUY SUBMITTED")
+    print(f"   exchange={plan.buy_exchange_id} side={plan.buy_side} qty={buy_qty:,} limit={buy_px:.3f}")
+    print(
+        f"   orderId={buy_result.get('orderId')} "
+        f"filled={buy_result.get('quantityTraded')} "
+        f"remaining={buy_result.get('remainingQuantity')}"
+    )
+    print("\n✅ ROTATION COMPLETE: sell was reconciled before replacement buy.")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Portfolio rotation analyzer. Live rotation is intentionally disabled pending dry-run validation."
@@ -438,6 +637,7 @@ def main() -> int:
     parser.add_argument("--min-improvement", type=float, default=0.05)
     parser.add_argument("--top", type=int, default=15)
     parser.add_argument("--write", action="store_true")
+    parser.add_argument("--confirm", action="store_true", help="Required with --live to authorize the exact freshly recomputed plan.")
     parser.add_argument(
         "--live",
         action="store_true",
@@ -445,8 +645,8 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    if args.live:
-        print("LIVE ROTATION DISABLED: run dry-run and regression tests first.")
+    if args.confirm and not args.live:
+        print("--confirm requires --live.")
         return 3
 
     api = SusqAPI()
@@ -481,6 +681,36 @@ def main() -> int:
         out = ROOT / "data" / "rotation_report.json"
         out.write_text(json.dumps(serializable, indent=2) + "\n", encoding="utf-8")
         print(f"\nreport_written={out}")
+
+    if args.live:
+        if report["plan"] is None:
+            print("\nLIVE ABORT: no qualifying rotation plan.")
+            return 4
+        if not args.confirm:
+            print("\nDRY RUN ONLY: add --confirm together with --live to authorize this freshly computed plan.")
+            return 0
+
+        plan = report["plan"]
+        print("\nLIVE ROTATION REVIEW")
+        print(f"SELL {plan.sell_quantity:,} {plan.sell_side} | {plan.sell_title} @ ~{plan.sell_price:.3f}")
+        print(f"BUY  replacement | {plan.buy_side} | {plan.buy_title} @ ~{plan.buy_price:.3f}")
+        print(f"expected-return improvement: {plan.improvement:+.1%}")
+        if input("\nType ROTATE to submit the freshly recomputed two-leg order: ").strip() != "ROTATE":
+            print("Cancelled.")
+            return 1
+
+        live_tournament, live_positions, live_orders = _fresh_tournament_state(api)
+        try:
+            return _execute_rotation(
+                api,
+                plan,
+                live_tournament,
+                live_positions,
+                live_orders,
+            )
+        except (SusqAPIError, OSError, ValueError) as exc:
+            print(f"🛑 LIVE ROTATION ERROR: {exc}")
+            return 2
 
     return 0
 
