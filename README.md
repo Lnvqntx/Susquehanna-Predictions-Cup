@@ -78,6 +78,7 @@ The rotation layer must remain dry-run until regression and historical tests pas
 ├── models/
 ├── scripts/
 ├── src/
+│   ├── rotator.py
 ├── trades/
 ├── docs/
 └── tests/
@@ -94,3 +95,7 @@ The rotation layer must remain dry-run until regression and historical tests pas
 Run the suite with:
 
 `python -m pytest -q`
+
+## Portfolio rotation
+
+The read-only rotation analyzer is now in `src/rotator.py`. It compares current holdings at executable exit prices with new opportunities and emits a dry-run SELL → BUY plan. Live rotation remains disabled until the two-leg sell/reconcile/buy/reconcile workflow is regression-tested.
