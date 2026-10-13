@@ -85,7 +85,8 @@ Required sequence:
 - [x] Idempotent writes
 - [x] Aggregate open-order budget
 - [x] Duplicate-exchange guard
-- [ ] Portfolio rotation
+- [x] Portfolio rotation analyzer (read-only/dry-run layer)
+- [ ] Live portfolio rotation
 - [ ] Stale-order management
 - [ ] Realtime market stream
 
