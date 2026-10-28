@@ -1,6 +1,6 @@
 # Susquehanna Predictions Cup — Quant Research
 
-Systematic research, execution, and portfolio-management framework for the 2026 Susquehanna Predictions Cup.
+Systematic research, execution, and portfolio-management, everything framework for the 2026 Susquehanna Predictions Cup.
 
 ## Mission
 
