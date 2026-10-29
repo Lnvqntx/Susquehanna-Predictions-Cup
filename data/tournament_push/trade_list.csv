@@ -1,0 +1,54 @@
+step,action,market,quantity,approx_price,approx_susqies
+1-exit,SELL YES,Will the Democratic Party win the Rhode Island Senate?,17751,0.895,15410.53
+1-exit,BUY YES (cover short),Will the Republican Party win the Delaware Senate?,5555,0.09,-514.95
+1-exit,SELL YES,Will the Democratic Party win the New Hampshire Senate?,9467,0.83,7621.88
+1-exit,SELL YES,Will the Democratic Party win the Michigan Senate?,7812,0.655,4963.35
+1-exit,SELL YES,Will the Democratic Party win the WI-01 House race?,6373,0.45,2781.81
+1-exit,SELL YES,Will the Democratic Party win the Texas Senate?,5042,0.635,3105.62
+1-exit,BUY YES (cover short),Will the Republican Party win the Georgia Senate?,6521,0.11,-738.83
+1-exit,SELL YES,Will the Democratic Party win the PA-01 House race?,7594,0.5,3683.09
+1-exit,SELL YES,Will the Democratic Party win the MT-01 House race?,2693,0.455,1188.56
+1-exit,SELL YES,Will the Democratic Party win the ME-02 House race?,7692,0.46,3432.17
+1-exit,SELL YES,Will the Republican Party win the CO-04 House race?,28108,0.64,17449.45
+2-buy,BUY YES,Will the Republican Party win the MN-02 House race?,7758,0.1,-831.55
+2-buy,BUY YES,Will the Republican Party win the Michigan Governor?,7758,0.1,-831.55
+2-buy,BUY YES,Will the Republican Party win the Georgia Senate?,7758,0.1,-831.55
+2-buy,BUY YES,Will the Republican Party win the VA-02 House race?,7767,0.105,-873.13
+2-buy,BUY YES,Will the Republican Party win the New York Governor?,7767,0.105,-873.13
+2-buy,BUY YES,Will the Republican Party win the NH-01 House race?,7776,0.11,-914.71
+2-buy,BUY YES,Will the Republican Party win the NJ-07 House race?,7776,0.11,-914.71
+2-buy,BUY YES,Will the Republican Party win the Minnesota Senate?,7782,0.115,-956.29
+2-buy,BUY YES,Will the Republican Party win the CA-22 House race?,7782,0.115,-956.29
+2-buy,BUY YES,Will the Republican Party win the New Hampshire Senate?,7793,0.125,-1039.44
+2-buy,BUY YES,Will the Republican Party win the CA-48 House race?,7793,0.125,-1039.44
+2-buy,BUY YES,Will the Republican Party win the AZ-06 House race?,7796,0.13,-1081.02
+2-buy,BUY YES,Will the Republican Party win the Arizona Governor?,7799,0.135,-1122.6
+2-buy,BUY YES,Will the Republican Party win the NE-02 House race?,7803,0.145,-1205.75
+2-buy,BUY YES,Will the Republican Party win the U.S. House?,7803,0.145,-1205.75
+2-buy,BUY YES,Will the Republican Party win the PA-07 House race?,7803,0.165,-1372.06
+2-buy,BUY YES,Will the Republican Party win the WA-03 House race?,7802,0.17,-1413.64
+2-buy,BUY YES,Will the Republican Party win the CO-08 House race?,7798,0.18,-1496.8
+2-buy,BUY YES,Will the Republican Party win the Alaska Governor?,7794,0.19,-1579.95
+2-buy,BUY YES,Will the Republican Party win the Wisconsin Governor?,7791,0.195,-1621.53
+2-buy,BUY YES,Will the Republican Party win the Iowa Governor?,7791,0.195,-1621.53
+2-buy,BUY YES,Will the Republican Party win the AZ-01 House race?,7785,0.205,-1704.69
+2-buy,BUY YES,Will the Republican Party win the Oregon Governor?,7758,0.24,-1995.73
+2-buy,BUY YES,Will the Republican Party win the Nevada Governor?,7730,0.27,-2245.19
+2-buy,BUY YES,Will the Republican Party win the IA-02 House race?,7709,0.29,-2411.51
+2-buy,BUY YES,Will the Republican Party win the MI-07 House race?,7704,0.295,-2453.08
+2-buy,BUY YES,Will the Republican Party win the FL-22 House race?,7699,0.3,-2494.66
+2-buy,BUY YES,Will the Republican Party win the U.S. Senate?,7671,0.325,-2702.55
+2-buy,BUY YES,Will the Republican Party win the Alaska Senate?,7659,0.335,-2785.7
+2-buy,BUY YES,Will the Republican Party win the MI-10 House race?,7648,0.345,-2868.86
+2-buy,BUY YES,Will the Republican Party win the Michigan Senate?,7642,0.35,-2910.44
+2-buy,BUY YES,Will the Republican Party win the Texas Senate?,7642,0.35,-2910.44
+2-buy,BUY YES,Will the Republican Party win the Maine Senate?,7624,0.365,-3035.17
+2-buy,BUY YES,Will the Republican Party win the NY-17 House race?,7624,0.365,-3035.17
+2-buy,BUY YES,Will the Republican Party win the VA-01 House race?,7594,0.39,-3243.06
+keep,HOLD,Will the Republican Party win the WI-03 House race?,20000,,
+keep,HOLD,Will the Democratic Party win the WA-03 House race?,-5422,,
+keep,HOLD,Will the Republican Party win the TX-15 House race?,13302,,
+keep,HOLD,Will the Republican Party win the PA-10 House race?,13043,,
+keep,HOLD,Will the Republican Party win the PA-08 House race?,20405,,
+keep,HOLD,Will the Republican Party win the IA-03 House race?,1,,
+keep,HOLD,Will the Republican Party win the IA-01 House race?,48290,,

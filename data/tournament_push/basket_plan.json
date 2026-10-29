@@ -1,0 +1,625 @@
+{
+  "baseline_hold_everything": {
+    "p": {
+      "126000": 0.0317,
+      "273000": 0.0,
+      "500000": 0.0,
+      "990000": 0.0
+    },
+    "median": 71327.0,
+    "p90": 98878.0,
+    "p99": 146668.0,
+    "max": 180375.0
+  },
+  "rho": 0.5,
+  "sims": 20000,
+  "objective": 126000.0,
+  "targets": [
+    126000,
+    273000,
+    500000,
+    990000
+  ],
+  "n_races": 117,
+  "best": {
+    "scenario": "Republican",
+    "keep_min_multiple": 2.0,
+    "band": [
+      0.1,
+      0.4
+    ],
+    "scheme": "equal_shares",
+    "n_legs": 35,
+    "budget": 60578.69,
+    "eval": {
+      "p": {
+        "126000": 0.1379,
+        "273000": 0.0147,
+        "500000": 0.0,
+        "990000": 0.0
+      },
+      "median": 25213.015499999994,
+      "p90": 152046.01549999998,
+      "p99": 295094.0155,
+      "max": 386020.0155
+    },
+    "exits": [
+      {
+        "action": "SELL YES",
+        "race": "Rhode Island Senate",
+        "party": "Democratic",
+        "exchange_id": "1076",
+        "quantity": 17751,
+        "est_price": 0.895,
+        "est_cash": 15410.53
+      },
+      {
+        "action": "BUY YES (cover short)",
+        "race": "Delaware Senate",
+        "party": "Republican",
+        "exchange_id": "1075",
+        "quantity": 5555,
+        "est_price": 0.09,
+        "est_cash": -514.95
+      },
+      {
+        "action": "SELL YES",
+        "race": "New Hampshire Senate",
+        "party": "Democratic",
+        "exchange_id": "1070",
+        "quantity": 9467,
+        "est_price": 0.83,
+        "est_cash": 7621.88
+      },
+      {
+        "action": "SELL YES",
+        "race": "Michigan Senate",
+        "party": "Democratic",
+        "exchange_id": "1047",
+        "quantity": 7812,
+        "est_price": 0.655,
+        "est_cash": 4963.35
+      },
+      {
+        "action": "SELL YES",
+        "race": "WI-01 House race",
+        "party": "Democratic",
+        "exchange_id": "1038",
+        "quantity": 6373,
+        "est_price": 0.45,
+        "est_cash": 2781.81
+      },
+      {
+        "action": "SELL YES",
+        "race": "Texas Senate",
+        "party": "Democratic",
+        "exchange_id": "982",
+        "quantity": 5042,
+        "est_price": 0.635,
+        "est_cash": 3105.62
+      },
+      {
+        "action": "BUY YES (cover short)",
+        "race": "Georgia Senate",
+        "party": "Republican",
+        "exchange_id": "948",
+        "quantity": 6521,
+        "est_price": 0.11,
+        "est_cash": -738.83
+      },
+      {
+        "action": "SELL YES",
+        "race": "PA-01 House race",
+        "party": "Democratic",
+        "exchange_id": "922",
+        "quantity": 7594,
+        "est_price": 0.5,
+        "est_cash": 3683.09
+      },
+      {
+        "action": "SELL YES",
+        "race": "MT-01 House race",
+        "party": "Democratic",
+        "exchange_id": "912",
+        "quantity": 2693,
+        "est_price": 0.455,
+        "est_cash": 1188.56
+      },
+      {
+        "action": "SELL YES",
+        "race": "ME-02 House race",
+        "party": "Democratic",
+        "exchange_id": "910",
+        "quantity": 7692,
+        "est_price": 0.46,
+        "est_cash": 3432.17
+      },
+      {
+        "action": "SELL YES",
+        "race": "CO-04 House race",
+        "party": "Republican",
+        "exchange_id": "897",
+        "quantity": 28108,
+        "est_price": 0.64,
+        "est_cash": 17449.45
+      }
+    ],
+    "kept": [
+      {
+        "race": "WI-03 House race",
+        "party": "Republican",
+        "quantity": 20000,
+        "avg_price": 0.29941102
+      },
+      {
+        "race": "WA-03 House race",
+        "party": "Democratic",
+        "quantity": -5422,
+        "avg_price": 0.135
+      },
+      {
+        "race": "TX-15 House race",
+        "party": "Republican",
+        "quantity": 13302,
+        "avg_price": 0.215
+      },
+      {
+        "race": "PA-10 House race",
+        "party": "Republican",
+        "quantity": 13043,
+        "avg_price": 0.23
+      },
+      {
+        "race": "PA-08 House race",
+        "party": "Republican",
+        "quantity": 20405,
+        "avg_price": 0.30000025
+      },
+      {
+        "race": "IA-03 House race",
+        "party": "Republican",
+        "quantity": 1,
+        "avg_price": 0.24
+      },
+      {
+        "race": "IA-01 House race",
+        "party": "Republican",
+        "quantity": 48290,
+        "avg_price": 0.16915595
+      }
+    ],
+    "legs": [
+      {
+        "race": "MN-02 House race",
+        "party": "Republican",
+        "exchange_id": "1026",
+        "last": 0.1,
+        "est_fill": 0.1072,
+        "spend": 831.55,
+        "shares": 7758
+      },
+      {
+        "race": "Michigan Governor",
+        "party": "Republican",
+        "exchange_id": "995",
+        "last": 0.1,
+        "est_fill": 0.1072,
+        "spend": 831.55,
+        "shares": 7758
+      },
+      {
+        "race": "Georgia Senate",
+        "party": "Republican",
+        "exchange_id": "948",
+        "last": 0.1,
+        "est_fill": 0.1072,
+        "spend": 831.55,
+        "shares": 7758
+      },
+      {
+        "race": "VA-02 House race",
+        "party": "Republican",
+        "exchange_id": "939",
+        "last": 0.105,
+        "est_fill": 0.1124,
+        "spend": 873.13,
+        "shares": 7767
+      },
+      {
+        "race": "New York Governor",
+        "party": "Republican",
+        "exchange_id": "874",
+        "last": 0.105,
+        "est_fill": 0.1124,
+        "spend": 873.13,
+        "shares": 7767
+      },
+      {
+        "race": "NH-01 House race",
+        "party": "Republican",
+        "exchange_id": "1065",
+        "last": 0.11,
+        "est_fill": 0.1176,
+        "spend": 914.71,
+        "shares": 7776
+      },
+      {
+        "race": "NJ-07 House race",
+        "party": "Republican",
+        "exchange_id": "917",
+        "last": 0.11,
+        "est_fill": 0.1176,
+        "spend": 914.71,
+        "shares": 7776
+      },
+      {
+        "race": "Minnesota Senate",
+        "party": "Republican",
+        "exchange_id": "1050",
+        "last": 0.115,
+        "est_fill": 0.1229,
+        "spend": 956.29,
+        "shares": 7782
+      },
+      {
+        "race": "CA-22 House race",
+        "party": "Republican",
+        "exchange_id": "891",
+        "last": 0.115,
+        "est_fill": 0.1229,
+        "spend": 956.29,
+        "shares": 7782
+      },
+      {
+        "race": "New Hampshire Senate",
+        "party": "Republican",
+        "exchange_id": "1071",
+        "last": 0.125,
+        "est_fill": 0.1334,
+        "spend": 1039.44,
+        "shares": 7793
+      },
+      {
+        "race": "CA-48 House race",
+        "party": "Republican",
+        "exchange_id": "893",
+        "last": 0.125,
+        "est_fill": 0.1334,
+        "spend": 1039.44,
+        "shares": 7793
+      },
+      {
+        "race": "AZ-06 House race",
+        "party": "Republican",
+        "exchange_id": "889",
+        "last": 0.13,
+        "est_fill": 0.1386,
+        "spend": 1081.02,
+        "shares": 7796
+      },
+      {
+        "race": "Arizona Governor",
+        "party": "Republican",
+        "exchange_id": "849",
+        "last": 0.135,
+        "est_fill": 0.1439,
+        "spend": 1122.6,
+        "shares": 7799
+      },
+      {
+        "race": "NE-02 House race",
+        "party": "Republican",
+        "exchange_id": "915",
+        "last": 0.145,
+        "est_fill": 0.1545,
+        "spend": 1205.75,
+        "shares": 7803
+      },
+      {
+        "race": "U.S. House",
+        "party": "Republican",
+        "exchange_id": "841",
+        "last": 0.145,
+        "est_fill": 0.1545,
+        "spend": 1205.75,
+        "shares": 7803
+      },
+      {
+        "race": "PA-07 House race",
+        "party": "Republican",
+        "exchange_id": "925",
+        "last": 0.165,
+        "est_fill": 0.1758,
+        "spend": 1372.06,
+        "shares": 7803
+      },
+      {
+        "race": "WA-03 House race",
+        "party": "Republican",
+        "exchange_id": "1037",
+        "last": 0.17,
+        "est_fill": 0.1812,
+        "spend": 1413.64,
+        "shares": 7802
+      },
+      {
+        "race": "CO-08 House race",
+        "party": "Republican",
+        "exchange_id": "899",
+        "last": 0.18,
+        "est_fill": 0.1919,
+        "spend": 1496.8,
+        "shares": 7798
+      },
+      {
+        "race": "Alaska Governor",
+        "party": "Republican",
+        "exchange_id": "1058",
+        "last": 0.19,
+        "est_fill": 0.2027,
+        "spend": 1579.95,
+        "shares": 7794
+      },
+      {
+        "race": "Wisconsin Governor",
+        "party": "Republican",
+        "exchange_id": "1004",
+        "last": 0.195,
+        "est_fill": 0.2081,
+        "spend": 1621.53,
+        "shares": 7791
+      },
+      {
+        "race": "Iowa Governor",
+        "party": "Republican",
+        "exchange_id": "858",
+        "last": 0.195,
+        "est_fill": 0.2081,
+        "spend": 1621.53,
+        "shares": 7791
+      },
+      {
+        "race": "AZ-01 House race",
+        "party": "Republican",
+        "exchange_id": "887",
+        "last": 0.205,
+        "est_fill": 0.2189,
+        "spend": 1704.69,
+        "shares": 7785
+      },
+      {
+        "race": "Oregon Governor",
+        "party": "Republican",
+        "exchange_id": "877",
+        "last": 0.24,
+        "est_fill": 0.2572,
+        "spend": 1995.73,
+        "shares": 7758
+      },
+      {
+        "race": "Nevada Governor",
+        "party": "Republican",
+        "exchange_id": "872",
+        "last": 0.27,
+        "est_fill": 0.2904,
+        "spend": 2245.19,
+        "shares": 7730
+      },
+      {
+        "race": "IA-02 House race",
+        "party": "Republican",
+        "exchange_id": "905",
+        "last": 0.29,
+        "est_fill": 0.3128,
+        "spend": 2411.51,
+        "shares": 7709
+      },
+      {
+        "race": "MI-07 House race",
+        "party": "Republican",
+        "exchange_id": "1020",
+        "last": 0.295,
+        "est_fill": 0.3184,
+        "spend": 2453.08,
+        "shares": 7704
+      },
+      {
+        "race": "FL-22 House race",
+        "party": "Republican",
+        "exchange_id": "1018",
+        "last": 0.3,
+        "est_fill": 0.324,
+        "spend": 2494.66,
+        "shares": 7699
+      },
+      {
+        "race": "U.S. Senate",
+        "party": "Republican",
+        "exchange_id": "843",
+        "last": 0.325,
+        "est_fill": 0.3523,
+        "spend": 2702.55,
+        "shares": 7671
+      },
+      {
+        "race": "Alaska Senate",
+        "party": "Republican",
+        "exchange_id": "1067",
+        "last": 0.335,
+        "est_fill": 0.3637,
+        "spend": 2785.7,
+        "shares": 7659
+      },
+      {
+        "race": "MI-10 House race",
+        "party": "Republican",
+        "exchange_id": "1022",
+        "last": 0.345,
+        "est_fill": 0.3751,
+        "spend": 2868.86,
+        "shares": 7648
+      },
+      {
+        "race": "Michigan Senate",
+        "party": "Republican",
+        "exchange_id": "1048",
+        "last": 0.35,
+        "est_fill": 0.3808,
+        "spend": 2910.44,
+        "shares": 7642
+      },
+      {
+        "race": "Texas Senate",
+        "party": "Republican",
+        "exchange_id": "983",
+        "last": 0.35,
+        "est_fill": 0.3808,
+        "spend": 2910.44,
+        "shares": 7642
+      },
+      {
+        "race": "Maine Senate",
+        "party": "Republican",
+        "exchange_id": "960",
+        "last": 0.365,
+        "est_fill": 0.3981,
+        "spend": 3035.17,
+        "shares": 7624
+      },
+      {
+        "race": "NY-17 House race",
+        "party": "Republican",
+        "exchange_id": "921",
+        "last": 0.365,
+        "est_fill": 0.3981,
+        "spend": 3035.17,
+        "shares": 7624
+      },
+      {
+        "race": "VA-01 House race",
+        "party": "Republican",
+        "exchange_id": "938",
+        "last": 0.39,
+        "est_fill": 0.427,
+        "spend": 3243.06,
+        "shares": 7594
+      }
+    ]
+  },
+  "table": [
+    {
+      "scenario": "Republican",
+      "keep_min_multiple": 2.0,
+      "band": [
+        0.1,
+        0.4
+      ],
+      "scheme": "equal_shares",
+      "n_legs": 35,
+      "budget": 60578.69,
+      "p": {
+        "126000": 0.1379,
+        "273000": 0.0147,
+        "500000": 0.0,
+        "990000": 0.0
+      },
+      "median": 25213,
+      "p99": 295094
+    },
+    {
+      "scenario": "Republican",
+      "keep_min_multiple": 1.4,
+      "band": [
+        0.1,
+        0.4
+      ],
+      "scheme": "equal_shares",
+      "n_legs": 35,
+      "budget": 43129.24,
+      "p": {
+        "126000": 0.1375,
+        "273000": 0.0082,
+        "500000": 0.0,
+        "990000": 0.0
+      },
+      "median": 39385,
+      "p99": 266059
+    },
+    {
+      "scenario": "Republican",
+      "keep_min_multiple": 2.0,
+      "band": [
+        0.1,
+        0.4
+      ],
+      "scheme": "equal_stake",
+      "n_legs": 35,
+      "budget": 60578.69,
+      "p": {
+        "126000": 0.13135,
+        "273000": 0.02095,
+        "500000": 0.0,
+        "990000": 0.0
+      },
+      "median": 18419,
+      "p99": 321355
+    },
+    {
+      "scenario": "Republican",
+      "keep_min_multiple": 1.4,
+      "band": [
+        0.1,
+        0.4
+      ],
+      "scheme": "equal_stake",
+      "n_legs": 35,
+      "budget": 43129.24,
+      "p": {
+        "126000": 0.1306,
+        "273000": 0.0129,
+        "500000": 0.0,
+        "990000": 0.0
+      },
+      "median": 36065,
+      "p99": 284530
+    },
+    {
+      "scenario": "Republican",
+      "keep_min_multiple": 2.0,
+      "band": [
+        0.1,
+        0.4
+      ],
+      "scheme": "cheap_tilt",
+      "n_legs": 35,
+      "budget": 60578.69,
+      "p": {
+        "126000": 0.12845,
+        "273000": 0.0231,
+        "500000": 0.0,
+        "990000": 0.0
+      },
+      "median": 15702,
+      "p99": 332888
+    },
+    {
+      "scenario": "Republican",
+      "keep_min_multiple": 1.4,
+      "band": [
+        0.1,
+        0.4
+      ],
+      "scheme": "cheap_tilt",
+      "n_legs": 35,
+      "budget": 43129.24,
+      "p": {
+        "126000": 0.1271,
+        "273000": 0.01425,
+        "500000": 0.0,
+        "990000": 0.0
+      },
+      "median": 33936,
+      "p99": 294022
+    }
+  ]
+}

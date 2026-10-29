@@ -1,0 +1,238 @@
+market_id,exchange_id,party,race,last_price
+388,1077,Republican,Rhode Island Senate,0.095
+387,1076,Democratic,Rhode Island Senate,0.905
+386,1075,Republican,Delaware Senate,0.08
+385,1074,Republican,Rhode Island Governor,0.09
+384,1073,Democratic,Rhode Island Governor,0.92
+383,1072,Democratic,Oklahoma Senate,0.075
+382,1071,Republican,New Hampshire Senate,0.125
+381,1070,Democratic,New Hampshire Senate,0.84
+380,1069,Republican,Massachusetts Senate,0.06
+379,1068,Democratic,Massachusetts Senate,0.93
+378,1067,Republican,Alaska Senate,0.335
+377,1066,Democratic,Alaska Senate,0.69
+376,1065,Republican,NH-01 House race,0.11
+375,1064,Democratic,NH-01 House race,0.915
+374,1063,Republican,Oklahoma Governor,0.84
+373,1062,Republican,New Hampshire Governor,0.88
+372,1061,Democratic,New Hampshire Governor,0.115
+371,1060,Republican,Massachusetts Governor,0.06
+370,1059,Democratic,Massachusetts Governor,0.93
+369,1058,Republican,Alaska Governor,0.19
+368,1057,Democratic,Alaska Governor,0.815
+366,1055,Republican,Wyoming Senate,0.905
+365,1054,Democratic,Wyoming Senate,0.07
+364,1053,Republican,Virginia Senate,0.075
+363,1052,Republican,Tennessee Senate,0.905
+362,1051,Democratic,Tennessee Senate,0.105
+361,1050,Republican,Minnesota Senate,0.115
+360,1049,Democratic,Minnesota Senate,0.875
+359,1048,Republican,Michigan Senate,0.35
+358,1047,Democratic,Michigan Senate,0.665
+357,1046,Republican,Kansas Senate,0.485
+356,1045,Democratic,Kansas Senate,0.525
+355,1044,Republican,Florida Senate,0.85
+354,1043,Democratic,Florida Senate,0.165
+353,1042,Democratic,Delaware Senate,0.935
+352,1041,Republican,WI-03 House race,0.165
+351,1040,Democratic,WI-03 House race,0.855
+350,1039,Republican,WI-01 House race,0.555
+349,1038,Democratic,WI-01 House race,0.46
+348,1037,Republican,WA-03 House race,0.17
+347,1036,Democratic,WA-03 House race,0.85
+346,1035,Republican,VA-07 House race,0.055
+345,1034,Republican,VA-05 House race,0.595
+344,1033,Democratic,VA-05 House race,0.42
+343,1032,Democratic,VA-02 House race,0.88
+342,1031,Democratic,VA-01 House race,0.63
+341,1030,Republican,TN-05 House race,0.91
+340,1029,Democratic,TN-05 House race,0.095
+339,1028,Republican,MN-05 House race,0.05
+338,1027,Democratic,MN-05 House race,0.935
+337,1026,Republican,MN-02 House race,0.1
+336,1025,Democratic,MN-02 House race,0.915
+335,1024,Republican,MN-01 House race,0.605
+334,1023,Democratic,MN-01 House race,0.41
+333,1022,Republican,MI-10 House race,0.345
+332,1021,Democratic,MI-10 House race,0.66
+331,1020,Republican,MI-07 House race,0.295
+330,1019,Democratic,MI-07 House race,0.7
+329,1018,Republican,FL-22 House race,0.3
+328,1017,Democratic,FL-22 House race,0.7
+327,1016,Republican,FL-20 House race,0.085
+326,1015,Democratic,FL-20 House race,0.935
+325,1014,Republican,FL-16 House race,0.775
+324,1013,Democratic,FL-16 House race,0.24
+323,1012,Democratic,FL-13 House race,0.3
+322,1011,Republican,FL-09 House race,0.655
+321,1010,Republican,FL-07 House race,0.74
+320,1009,Democratic,FL-07 House race,0.26
+319,1008,Republican,AL-02 House race,0.595
+318,1007,Democratic,AL-02 House race,0.405
+317,1006,Republican,Wyoming Governor,0.955
+316,1005,Democratic,Wyoming Governor,0.04
+315,1004,Republican,Wisconsin Governor,0.195
+314,1003,Democratic,Wisconsin Governor,0.82
+313,1002,Republican,Vermont Governor,0.765
+312,1001,Democratic,Vermont Governor,0.255
+311,1000,Republican,Tennessee Governor,0.935
+310,999,Democratic,Tennessee Governor,0.09
+309,998,Republican,South Dakota Governor,0.9
+308,997,Republican,Minnesota Governor,0.055
+307,996,Democratic,Minnesota Governor,0.955
+306,995,Republican,Michigan Governor,0.1
+305,994,Democratic,Michigan Governor,0.895
+304,993,Republican,Kansas Governor,0.71
+303,992,Democratic,Kansas Governor,0.305
+302,991,Republican,Hawaii Governor,0.045
+301,990,Democratic,Hawaii Governor,0.92
+300,989,Republican,Florida Governor,0.665
+299,988,Democratic,Florida Governor,0.325
+298,987,Democratic,Connecticut Governor,0.925
+297,986,Republican,West Virginia Senate,0.96
+296,985,Democratic,West Virginia Senate,0.04
+295,984,Democratic,Virginia Senate,0.955
+294,983,Republican,Texas Senate,0.35
+293,982,Democratic,Texas Senate,0.645
+292,981,Republican,South Dakota Senate,0.94
+291,980,Democratic,South Dakota Senate,0.035
+290,979,Republican,South Carolina Senate,0.675
+289,978,Democratic,South Carolina Senate,0.335
+288,977,Republican,Oregon Senate,0.04
+287,976,Democratic,Oregon Senate,0.96
+286,975,Republican,Oklahoma Senate,0.945
+285,974,Republican,New Mexico Senate,0.05
+284,973,Democratic,New Mexico Senate,0.96
+283,972,Republican,New Jersey Senate,0.045
+282,971,Democratic,New Jersey Senate,0.96
+281,970,Republican,Nebraska Senate,0.665
+280,969,Independent,Nebraska Senate,0.305
+279,968,Democratic,Nebraska Senate,0.065
+278,967,Republican,North Carolina Senate,0.08
+277,966,Democratic,North Carolina Senate,0.945
+276,965,Independent,Montana Senate,0.085
+275,964,Republican,Montana Senate,0.895
+274,963,Democratic,Montana Senate,0.05
+273,962,Republican,Mississippi Senate,0.825
+272,961,Democratic,Mississippi Senate,0.2
+271,960,Republican,Maine Senate,0.365
+270,959,Democratic,Maine Senate,0.66
+269,958,Republican,Louisiana Senate,0.9
+268,957,Democratic,Louisiana Senate,0.105
+267,956,Republican,Kentucky Senate,0.955
+266,955,Democratic,Kentucky Senate,0.045
+265,954,Republican,Illinois Senate,0.055
+264,953,Democratic,Illinois Senate,0.96
+263,952,Republican,Idaho Senate,0.955
+262,951,Democratic,Idaho Senate,0.04
+261,950,Republican,Iowa Senate,0.53
+260,949,Democratic,Iowa Senate,0.47
+259,948,Republican,Georgia Senate,0.1
+258,947,Democratic,Georgia Senate,0.905
+257,946,Republican,Colorado Senate,0.075
+256,945,Democratic,Colorado Senate,0.95
+255,944,Republican,Arkansas Senate,0.945
+254,943,Democratic,Arkansas Senate,0.055
+253,942,Republican,Alabama Senate,0.945
+252,941,Democratic,Alabama Senate,0.04
+251,940,Democratic,VA-07 House race,0.95
+250,939,Republican,VA-02 House race,0.105
+249,938,Republican,VA-01 House race,0.39
+248,937,Republican,TX-28 House race,0.08
+247,936,Democratic,TX-28 House race,0.92
+246,935,Republican,TX-23 House race,0.585
+245,934,Democratic,TX-23 House race,0.4
+244,933,Republican,TX-15 House race,0.17
+243,932,Democratic,TX-15 House race,0.85
+242,931,Republican,SC-01 House race,0.615
+241,930,Democratic,SC-01 House race,0.375
+240,929,Republican,PA-10 House race,0.225
+239,928,Democratic,PA-10 House race,0.765
+238,927,Republican,PA-08 House race,0.19
+237,926,Democratic,PA-08 House race,0.815
+236,925,Republican,PA-07 House race,0.165
+235,924,Democratic,PA-07 House race,0.855
+234,923,Republican,PA-01 House race,0.505
+233,922,Democratic,PA-01 House race,0.51
+232,921,Republican,NY-17 House race,0.365
+231,920,Democratic,NY-17 House race,0.635
+230,919,Republican,NY-13 House race,0.035
+229,918,Democratic,NY-13 House race,0.965
+228,917,Republican,NJ-07 House race,0.11
+227,916,Democratic,NJ-07 House race,0.905
+226,915,Republican,NE-02 House race,0.145
+225,914,Democratic,NE-02 House race,0.88
+224,913,Republican,MT-01 House race,0.545
+223,912,Democratic,MT-01 House race,0.465
+222,911,Republican,ME-02 House race,0.535
+221,910,Democratic,ME-02 House race,0.47
+220,909,Republican,KY-04 House race,0.95
+219,908,Democratic,KY-04 House race,0.06
+218,907,Republican,IA-03 House race,0.17
+217,906,Democratic,IA-03 House race,0.82
+216,905,Republican,IA-02 House race,0.29
+215,904,Democratic,IA-02 House race,0.7
+214,903,Republican,IA-01 House race,0.095
+213,902,Democratic,IA-01 House race,0.9
+212,901,Republican,FL-13 House race,0.71
+211,900,Democratic,FL-09 House race,0.33
+210,899,Republican,CO-08 House race,0.18
+209,898,Democratic,CO-08 House race,0.835
+208,897,Republican,CO-04 House race,0.65
+207,896,Democratic,CO-04 House race,0.37
+206,895,Republican,CO-03 House race,0.63
+205,894,Democratic,CO-03 House race,0.385
+204,893,Republican,CA-48 House race,0.125
+203,892,Democratic,CA-48 House race,0.89
+202,891,Republican,CA-22 House race,0.115
+201,890,Democratic,CA-22 House race,0.885
+200,889,Republican,AZ-06 House race,0.13
+199,888,Democratic,AZ-06 House race,0.88
+198,887,Republican,AZ-01 House race,0.205
+197,886,Democratic,AZ-01 House race,0.795
+196,885,Republican,Texas Governor,0.645
+195,884,Democratic,Texas Governor,0.365
+194,883,Democratic,South Dakota Governor,0.09
+193,882,Republican,South Carolina Governor,0.85
+192,881,Democratic,South Carolina Governor,0.125
+191,880,Independent,Rhode Island Governor,0.045
+190,879,Republican,Pennsylvania Governor,0.055
+189,878,Democratic,Pennsylvania Governor,0.935
+188,877,Republican,Oregon Governor,0.24
+187,876,Democratic,Oregon Governor,0.775
+186,875,Democratic,Oklahoma Governor,0.155
+185,874,Republican,New York Governor,0.105
+184,873,Democratic,New York Governor,0.895
+183,872,Republican,Nevada Governor,0.27
+182,871,Democratic,Nevada Governor,0.735
+181,870,Republican,New Mexico Governor,0.075
+180,869,Democratic,New Mexico Governor,0.93
+179,868,Republican,Nebraska Governor,0.815
+178,867,Democratic,Nebraska Governor,0.2
+177,866,Republican,Maine Governor,0.065
+176,865,Democratic,Maine Governor,0.91
+175,864,Republican,Maryland Governor,0.04
+174,863,Democratic,Maryland Governor,0.96
+173,862,Republican,Illinois Governor,0.04
+172,861,Democratic,Illinois Governor,0.96
+171,860,Republican,Idaho Governor,0.95
+170,859,Democratic,Idaho Governor,0.07
+169,858,Republican,Iowa Governor,0.195
+168,857,Democratic,Iowa Governor,0.815
+167,856,Republican,Georgia Governor,0.42
+166,855,Democratic,Georgia Governor,0.595
+165,854,Republican,Connecticut Governor,0.065
+164,853,Republican,Colorado Governor,0.045
+163,852,Democratic,Colorado Governor,0.955
+162,851,Republican,California Governor,0.07
+161,850,Democratic,California Governor,0.95
+160,849,Republican,Arizona Governor,0.135
+159,848,Democratic,Arizona Governor,0.885
+158,847,Republican,Arkansas Governor,0.95
+157,846,Democratic,Arkansas Governor,0.055
+156,845,Republican,Alabama Governor,0.945
+155,844,Democratic,Alabama Governor,0.065
+154,843,Republican,U.S. Senate,0.325
+153,842,Democratic,U.S. Senate,0.69
+152,841,Republican,U.S. House,0.145
+151,840,Democratic,U.S. House,0.865

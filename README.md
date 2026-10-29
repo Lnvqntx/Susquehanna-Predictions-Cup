@@ -8,7 +8,14 @@ Finish the Midterm Elections tournament in the **top 3** by final SUSQie account
 
 The strategic stretch target is **1,000,000+ SUSQies**. The real objective is relative leaderboard rank.
 
-## Current snapshot — 2026-10-12
+## Endgame — 2026-10-29
+
+Rank 1,473 with 6 days left, so the book is being converted from a hedge into one correlated
+Republican-overperformance basket, plus election-night snipes of called races.
+Full plan, odds and commands: [`docs/ENDGAME.md`](docs/ENDGAME.md).
+Code: `src/tail_basket.py` (correlated sim + basket search) and `src/push_execute.py` (book-walked execution, dry run by default).
+
+## Earlier snapshot — 2026-10-12
 
 | Metric | Latest observed |
 |---|---:|
