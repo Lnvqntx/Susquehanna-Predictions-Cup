@@ -51,6 +51,7 @@ from src.scan_live import discover_midterm_tournament
 from src.susq_api import SusqAPI, SusqAPIError
 
 GAMMA = "https://gamma-api.polymarket.com"
+CHUNK = 40
 MAP_CSV = ROOT / "data/tournament_push/polymarket_map.csv"
 SUSQ_CSV = ROOT / "data/tournament_push/markets_2026-10-29.csv"
 STATE = ROOT / "data/election_night_state.json"
@@ -88,17 +89,18 @@ def poly_quotes(ids: list[str]) -> dict[str, dict[str, Any]]:
     missing from the first pass is asked for again with closed=true.
     """
     out = _poly_fetch(ids, closed=None)
-    missing = [i for i in ids if i not in out]
-    if missing:
-        out.update(_poly_fetch(missing, closed=True))
+    for flag in (False, True):
+        missing = [i for i in ids if i not in out]
+        if missing:
+            out.update(_poly_fetch(missing, closed=flag))
     return out
 
 
 def _poly_fetch(ids: list[str], closed: bool | None) -> dict[str, dict[str, Any]]:
     out: dict[str, dict[str, Any]] = {}
     ctx = ssl.create_default_context(cafile=certifi.where())
-    for i in range(0, len(ids), 40):
-        chunk = ids[i:i + 40]
+    for i in range(0, len(ids), CHUNK):
+        chunk = ids[i:i + CHUNK]
         params = [("id", x) for x in chunk] + [("limit", "100")]
         if closed is not None:
             params.append(("closed", "true" if closed else "false"))
@@ -106,24 +108,29 @@ def _poly_fetch(ids: list[str], closed: bool | None) -> dict[str, dict[str, Any]
         req = urllib.request.Request(f"{GAMMA}/markets?{q}",
                                      headers={"Accept": "application/json",
                                               "User-Agent": "susquehanna-predictions-cup/0.1"})
-        try:
-            with urllib.request.urlopen(req, timeout=15, context=ctx) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-        except Exception as exc:  # network blips: skip this round, try next loop
-            log(f"poly fetch error: {exc}")
-            continue
+        data = None
+        for attempt in range(4):  # gamma rate-limits bursts; back off and retry
+            try:
+                with urllib.request.urlopen(req, timeout=15, context=ctx) as resp:
+                    data = json.loads(resp.read().decode("utf-8"))
+                break
+            except Exception as exc:
+                if attempt == 3:
+                    log(f"poly fetch error (chunk {i // CHUNK + 1}): {exc}")
+                time.sleep(1.0 * (attempt + 1))
+        time.sleep(0.4)
         for m in data if isinstance(data, list) else []:
             try:
                 prices = json.loads(m.get("outcomePrices") or "[]")
             except json.JSONDecodeError:
                 prices = []
             yes = float(prices[0]) if prices else None
-            closed = bool(m.get("closed"))
+            is_closed = bool(m.get("closed"))
             out[str(m["id"])] = {
                 "bid": _f(m.get("bestBid")), "ask": _f(m.get("bestAsk")),
-                "last": _f(m.get("lastTradePrice")), "yes": yes, "closed": closed,
-                "yes_won": closed and yes is not None and yes >= 0.99,
-                "yes_lost": closed and yes is not None and yes <= 0.01,
+                "last": _f(m.get("lastTradePrice")), "yes": yes, "closed": is_closed,
+                "yes_won": is_closed and yes is not None and yes >= 0.99,
+                "yes_lost": is_closed and yes is not None and yes <= 0.01,
             }
     return out
 
