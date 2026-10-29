@@ -102,7 +102,9 @@ def cmd_plan(args: argparse.Namespace) -> int:
     print(f"scenario={plan['scenario']} band={plan['band']} scheme={plan['scheme']} legs={len(plan['legs'])}")
 
     print("\n-- exits (raise cash first) --")
-    for e in plan["exits"]:
+    if args.skip_exits:
+        print("skipped (--skip-exits)")
+    for e in ([] if args.skip_exits else plan["exits"]):
         ex = resolve_exchange(markets, e["race"], e["party"]) or e["exchange_id"]
         book = api.orderbook(ex, depth=50, tournament_id=tid)
         if e["action"].startswith("SELL"):
@@ -165,6 +167,8 @@ def main() -> int:
     p.add_argument("--max-markup", type=float, default=0.35, help="basket: max limit vs snapshot price")
     p.add_argument("--max-price", type=float, default=0.45)
     p.add_argument("--live", action="store_true")
+    p.add_argument("--skip-exits", action="store_true",
+                   help="only place the basket buys (use if exits already went through)")
     s = sub.add_parser("snipe")
     s.add_argument("--call", action="append", required=True, help='"<race>=<Republican|Democratic>"')
     s.add_argument("--spend", type=float, default=5000)
