@@ -57,3 +57,24 @@ Rebuild the plan right before executing; prices move.
   account 92,299. The roughly 2.3k drop from 94.6k is the bid/ask spread paid on the round trip.
   Covering the DE and GA shorts released collateral, so cash came in about 12k above plan. That
   ~14k is held back for election-night snipes.
+
+## Election-night autopilot (`src/election_night.py`)
+This handles the night unattended, since there's a presentation at 10:00 IST on Nov 4.
+Kalshi's API is blocked from India (CloudFront 403), but Polymarket's public data API works.
+`data/tournament_push/polymarket_map.csv` maps 116 of the 117 SUSQ races to their
+Polymarket markets. ME-02 has no Polymarket market.
+
+Each 20-second loop does three things:
+- **BUY.** When a race that was open before results (Polymarket < 0.90 on Oct 29) has Polymarket bid
+  >= 0.96 with a tight spread for 90 s, buy the SUSQ YES of that winner. Price must be <= min(0.93, poly - 0.04).
+  Cap is 2.5k per race, 40k net total, and each race is bought at most once.
+- **DUMP.** When Polymarket says one of our held legs has lost (<= 0.03), sell it into whatever SUSQ still bids (>= 0.02).
+- **CYCLE.** Once SUSQ bids >= 0.985 on a race the bot bought, sell it and reuse the cash.
+
+Dry-run check (any time): `python3 src/election_night.py --once`
+Start it Nov 3 before ~23:00 IST. Plug the Mac in and leave the lid open:
+```
+caffeinate -dimsu python3 -u src/election_night.py --live > data/election_night.log 2>&1 &
+```
+It does nothing before 04:30 IST and stops itself at 22:15 IST Nov 4. To halt it, run `touch STOP` in the repo root.
+To watch it, run `tail -f data/election_night.log`.
