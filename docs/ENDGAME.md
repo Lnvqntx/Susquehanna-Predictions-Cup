@@ -50,3 +50,10 @@ python src/push_execute.py plan                     # dry run with live order bo
 python src/push_execute.py plan --live              # place the exits + basket
 ```
 Rebuild the plan right before executing; prices move.
+
+## Execution log
+- **2026-10-29 21:50 IST** — `push_execute.py plan --live` ran once. All 11 exits and 35 basket buys
+  filled completely (no resting orders). Portfolio afterwards: 42 positions, value 78,329, cash 13,970,
+  account 92,299. The roughly 2.3k drop from 94.6k is the bid/ask spread paid on the round trip.
+  Covering the DE and GA shorts released collateral, so cash came in about 12k above plan. That
+  ~14k is held back for election-night snipes.
