@@ -93,3 +93,9 @@ To watch it, run `tail -f data/election_night.log`.
   real-money markets was low-probability. With Polymarket at roughly half SUSQ's prices on the R longshots, the honest
   odds were worse than the model said.
 - Automations that need a manual start fail on the busiest day. Next time, schedule the start (launchd/cron) when the code ships.
+- **2026-11-04 13:23–14:27 IST.** Further bot activity. It bought AZ-06 D, FL-09 D, MT-01 D, Hawaii Gov D, Maine Gov D and
+  Maine Sen D at 0.955–0.975, all with Polymarket >= 0.986. It also dumped NH-01 R, NH Sen R, PA-08 R, U.S. House R and NY-17 R.
+  Total snipe spend was ~15.4k, leaving 261 cash. Estimated value added vs. doing nothing: ~2.5k.
+- **2026-11-04 20:40 IST (1h49m before close).** Leaderboard rank **1,796**, **-50.3k** (up from -54.8k at 13:00).
+  AP still had not called AZ-06 or FL-09 as of ~20:00 IST (Polymarket ~99% D on both). Those positions are held, and
+  final standings are confirmed only after all markets resolve.

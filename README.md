@@ -8,6 +8,12 @@ Finish the Midterm Elections tournament in the **top 3** by final SUSQie account
 
 The strategic stretch target is **1,000,000+ SUSQies**. The real objective is relative leaderboard rank.
 
+## Final standing — 2026-11-04 20:40 IST
+
+Rank **1,796**, **-50.3k SUSQies** with 1h49m to close. The Democratic sweep beat the Republican-overperformance basket.
+The election-night bot recovered ~4.5k by dumping resolved losers and sniping called races. Full log and
+lessons are in [`docs/ENDGAME.md`](docs/ENDGAME.md).
+
 ## Endgame — 2026-10-29
 
 Rank 1,473 with 6 days left, so the book is being converted from a hedge into one correlated
