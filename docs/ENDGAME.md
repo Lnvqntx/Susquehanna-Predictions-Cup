@@ -78,3 +78,18 @@ caffeinate -dimsu python3 -u src/election_night.py --live > data/election_night.
 ```
 It does nothing before 04:30 IST and stops itself at 22:15 IST Nov 4. To halt it, run `touch STOP` in the repo root.
 To watch it, run `tail -f data/election_night.log`.
+
+## Result log
+- **Election night.** Democrats swept the House, the Senate and most competitive races, the opposite of the
+  R-overperformance basket. The Nov 3 bot start was missed. Account at 13:00 IST Nov 4: 45,198 (-54.8%).
+- **2026-11-04 13:21 IST.** Started the bot late with day-after settings:
+  `--baseline-max 1.0 --max-buy 0.975 --min-gap 0.015 --confirm-secs 30`.
+  The first pass made 16 dumps of resolved R losers into SUSQ bids of 0.02-0.07 (~1.5k recovered).
+  It also bought 4 resolved winners at 0.95-0.975: AR Sen R, IA Sen D, WV Sen R, WY Sen R (~6.8k, ~230 locked edge).
+  Cash after the pass: 7.1k.
+
+### Lessons
+- Rank-maximising variance was the right *type* of bet from rank 1,473. But betting against a crowd that agreed with
+  real-money markets was low-probability. With Polymarket at roughly half SUSQ's prices on the R longshots, the honest
+  odds were worse than the model said.
+- Automations that need a manual start fail on the busiest day. Next time, schedule the start (launchd/cron) when the code ships.
