@@ -99,3 +99,6 @@ To watch it, run `tail -f data/election_night.log`.
 - **2026-11-04 20:40 IST (1h49m before close).** Leaderboard rank **1,796**, **-50.3k** (up from -54.8k at 13:00).
   AP still had not called AZ-06 or FL-09 as of ~20:00 IST (Polymarket ~99% D on both). Those positions are held, and
   final standings are confirmed only after all markets resolve.
+- **2026-11-04 22:16 IST.** The bot exited cleanly at its scheduled stop (`done`). It placed no orders after 14:27 IST.
+  Trading closed ~22:30 IST. Final standings are pending resolution of the races AP had not called
+  (AZ-06, FL-09 as of ~20:00 IST).
